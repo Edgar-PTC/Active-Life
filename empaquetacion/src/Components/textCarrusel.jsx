@@ -42,20 +42,48 @@ function TextCarousel({ textosArray }) {
   return (
     <div className="flex flex-col p-8 container w-full justify-between gap-20">
       {/* Caja principal */}
-      <div className="CarruselText">
+      <div className="CarruselText gap-8">
+        {textosArray[current].head ? (
+          <>
+            <h2
+              style={{
+                  transition: "opacity 0.35s ease, transform 0.35s ease",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(-10px)"
+              }}
+            >
+              {textosArray[current].head}
+            </h2>
+            <p
+              style={{
+                  transition: "opacity 0.35s ease, transform 0.35s ease",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(-10px)",
+                  fontSize: textosArray[current].head? "20px" : "50px",
+                  fontWeight: textosArray[current].head? "200" : "500"
+              }}
+            >
+              {textosArray[current].text}
+            </p>
+          </>
+        ) : (
         <p
           style={{
               transition: "opacity 0.35s ease, transform 0.35s ease",
               opacity: visible ? 1 : 0,
               transform: visible ? "translateY(0)" : "translateY(-10px)",
+              fontSize: textosArray[current].head? "20px" : "50px",
+              fontWeight: textosArray[current].head? "200" : "500"
           }}
         >
-          {textosArray[current]}
+          {textosArray[current].text}
         </p>
+        )}
+        
       </div>
 
       {/* Dots */}
-      <div className="flex justify-center gap-3 m-4">
+      <div className="flex justify-center gap-4 m-4">
         {textosArray.map((_, i) => (
           <button key={i} onClick={() => { if (playing) startTimer(); goTo(i); }} className="dots"  
           style={{

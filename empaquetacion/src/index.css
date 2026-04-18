@@ -122,6 +122,13 @@ body{
 }
 
 .CarruselText p{
+  text-align: center;
+  color: var(--white);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.CarruselText h2{
   font-size: 50px;
   font-weight: 500;
   text-align: center;

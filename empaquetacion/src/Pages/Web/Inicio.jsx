@@ -3,10 +3,10 @@ import TextCarousel from "../../Components/textCarrusel";
 import ImageText from "../../Components/ImageText";
 
 const Array = [
-    "Tu camino hacia una vida saludable empieza hoy",
-    "El movimiento no tiene edad, tu determinación tampoco",
-    "Cuidar de ti es un plan para siempre. Tenemos el equipo ideal para lograrlo",
-    "Nuestra meta es tu bienestar, sin importar el número de velas en el pastel"
+    {"text": "Tu camino hacia una vida saludable empieza hoy"},
+    {"text": "El movimiento no tiene edad, tu determinación tampoco"},
+    {"text": "Cuidar de ti es un plan para siempre. Tenemos el equipo ideal para lograrlo"},
+    {"text": "Nuestra meta es tu bienestar, sin importar el número de velas en el pastel"}
 ]
 
 const Home = () => {
