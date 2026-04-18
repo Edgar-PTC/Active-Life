@@ -6,16 +6,17 @@ function Nav1_Web() {
     const [isSolid, setIsSolid] = useState(false);
 
     useEffect(() => {
-        const hero = document.querySelector('first');
         const handleScroll = () => {
-        setIsSolid(window.scrollY >= hero.offsetTop + hero.offsetHeight);
+            // Se vuelve sólido cuando pasas 800px (altura de tu BannerHome)
+            setIsSolid(window.scrollY >= 650);
         };
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return(
-        <nav className="NavWeb" style={{background: isSolid ? 'var(--green_#7F9E7A)' : 'transparent',}}>
+        <nav className="NavWeb" style={{background: isSolid ? 'var(--green_7F9E7A)' : 'transparent',}}>
             <img className="ImgNav" src="https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776401728/Gemini_Generated_Logo_gyanzj.png" alt="" />
             <ul className="NavwebUl">
                 <Link to="/" className="LinkNav">Inicio</Link>
