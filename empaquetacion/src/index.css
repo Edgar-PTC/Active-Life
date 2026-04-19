@@ -70,6 +70,29 @@ body{
   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776535359/Gemini_Generated_Fondo_AboutUs_m1zbg9.png");
 }
 
+.Acceder{
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776614666/Gemini_Generated_Fondo_LogIn_orwy7l.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+}
+
+.Acceder img{
+max-width: 200px;
+}
+
+.InputAcceder{
+  background-color: var(--white);
+  height: 2rem;
+  width: 100%;
+  padding: 1rem;
+  font-weight: 200;
+}
+
+.AccederLink{
+  background-color: var(--green_81A65D);
+}
+
 .BannerHome{
   background-repeat: no-repeat;
   background-size: cover;
@@ -162,4 +185,9 @@ footer{
 
 footer img{
   max-width: 80px;
+}
+
+.Login{
+  background-color: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--white) ;
 }
