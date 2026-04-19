@@ -21,6 +21,7 @@
 }
 
 body{
+  user-select: none;
   margin: 0;
   padding: 0;
   background-color: var(--gray);
@@ -190,4 +191,56 @@ footer img{
 .Login{
   background-color: rgba(255, 255, 255, 0.45);
   border: 1px solid var(--white) ;
+}
+
+.CarritoProductos{
+  overflow-y: auto;
+  max-height: 30rem;
+  width: 100%;
+}
+.CarritoProductos::-webkit-scrollbar {
+  width: 15px;
+}
+
+.CarritoProductos::-webkit-scrollbar-track {
+  background: var(--white);
+  border-radius: 10px;
+}
+
+.CarritoProductos::-webkit-scrollbar-thumb {
+  background: var(--green_455942);
+  border-radius: 10px;
+}
+
+.CarritoProductos::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.CarritoProductos::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+.CariitoImages{
+  width: 180px;
+}
+
+.Box_Plus_Min{
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+
+.Box_Plus_Min button{
+  background-color: var(--green_455942);
+  color: var(--white);
+  padding: 10px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.Box_Plus_Min div{
+  background-color: var(--white);
+  padding: 2px 15px;
+  height: 100%;
 }
