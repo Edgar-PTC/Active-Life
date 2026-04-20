@@ -46,7 +46,6 @@ const CarritoCliente = () => {
     //Ejecuta la funcion cada vez que hay cambios en el Array   
     useEffect(() => {
         calcularTotales();
-        console.log(ArrayList);
     }, [ArrayList]);
 
     return(

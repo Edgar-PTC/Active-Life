@@ -28,6 +28,12 @@ body{
   font-family: var(--font_family);
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .NavWeb{
   display: flex;
   flex-direction: row;
@@ -137,7 +143,6 @@ max-width: 200px;
   align-items: center;
   padding: 2rem;
   background: "#fff";
-  border: "1px solid #e5e5e5";
   padding: "2.5rem 2rem";
   min-height: 140px;
   text-align: "center";
@@ -198,6 +203,7 @@ footer img{
   max-height: 30rem;
   width: 100%;
 }
+
 .CarritoProductos::-webkit-scrollbar {
   width: 15px;
 }
@@ -243,4 +249,17 @@ footer img{
   background-color: var(--white);
   padding: 2px 15px;
   height: 100%;
+}
+
+.ResumenCarrito{
+  background-color: var(--green_455942);
+  overflow-y: auto;
+  height: 12rem;
+  width: 100%;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.ResumenCarrito::-webkit-scrollbar {
+  display: none;
 }
