@@ -1,121 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// Se importan los componentes de react-router-dom, nuevas dependencias que determinan en que paginas se muestran diferentes navs
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+// Se importan los navs y las paginas
+import Nav from "./Components/Nav1_Web";
+import Home from "./Pages/Web - Client/Inicio";
+import Us from "./Pages/Web - Client/Nosotros";
+import Acceder from "./Pages/Web - Client/Acceder";
+import CarritoCliente from "./Pages/Web - Client/CarritoCliente";
+import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente"
+import Nav2_Web from "./Components/Nav2_web";
 
+// Se crea un objeto para las rutas que iran en el nav publico sin iniciar sesion, este objeto puede contener diferentes componentes, como el Nav u otros elementos como un Footer, pero el contenido preincipal es el de cada ruta
+const WebLayout = () => {
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <Nav />
+      <Outlet />
     </>
-  )
+  );
+};
+
+// Otro objeto para agregar la ruta de las interfaces que iran en el nav. Aqui como solo estan las rutas de las interfaces, solamentes eso se muestra, sin ningun otro contenido
+const AuthLayout = () => {
+  return (
+    <>
+      <Nav2_Web />
+      <Outlet />
+    </>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Rutas CON navbar */}
+        <Route element={<WebLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/us" element={<Us />} />
+        </Route>
+
+        {/* Rutas SIN navbar */}
+        <Route element={<AuthLayout />}>
+          <Route path="/inicioSesion" element={<Acceder />} />
+          <Route path="/client/carritoCliente" element={<CarritoCliente />} />
+          <Route path="/client/PagocarritoCliente" element={<PagoCarritoCliente />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
