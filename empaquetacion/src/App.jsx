@@ -22,7 +22,16 @@ const WebLayout = () => {
 };
 
 // Otro objeto para agregar la ruta de las interfaces que iran en el nav. Aqui como solo estan las rutas de las interfaces, solamentes eso se muestra, sin ningun otro contenido
-const AuthLayout = () => {
+const NoLayout = () => {
+  return (
+    <>
+      <Outlet />
+    </>
+  );
+};
+
+// Otro objeto, ahora para definir las interfaces que tendran el Nav de cliente
+const ClientLayout = () => {
   return (
     <>
       <Nav2_Web />
@@ -42,8 +51,12 @@ function App() {
         </Route>
 
         {/* Rutas SIN navbar */}
-        <Route element={<AuthLayout />}>
+        <Route element={<NoLayout />}>
           <Route path="/inicioSesion" element={<Acceder />} />
+        </Route>
+
+        {/* Rutas SIN navbar */}
+        <Route element={<ClientLayout />}>
           <Route path="/client/dashboard" element={<DashboardClient />} />
           <Route path="/client/carritoCliente" element={<CarritoCliente />} />
           <Route path="/client/PagocarritoCliente" element={<PagoCarritoCliente />} />
