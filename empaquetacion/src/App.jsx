@@ -6,6 +6,7 @@ import Nav from "./Components/Nav1_Web";
 import Home from "./Pages/Web - Client/Inicio";
 import Us from "./Pages/Web - Client/Nosotros";
 import Acceder from "./Pages/Web - Client/Acceder";
+import DashboardClient from "./Pages/Web - Client/Dashboard";
 import CarritoCliente from "./Pages/Web - Client/CarritoCliente";
 import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente"
 
@@ -39,6 +40,7 @@ function App() {
         {/* Rutas SIN navbar */}
         <Route element={<AuthLayout />}>
           <Route path="/inicioSesion" element={<Acceder />} />
+          <Route path="/client/dashboard" element={<DashboardClient />} />
           <Route path="/client/carritoCliente" element={<CarritoCliente />} />
           <Route path="/client/PagocarritoCliente" element={<PagoCarritoCliente />} />
         </Route>
