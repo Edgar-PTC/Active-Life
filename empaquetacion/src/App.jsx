@@ -10,6 +10,7 @@ import DashboardClient from "./Pages/Web - Client/Dashboard";
 import CarritoCliente from "./Pages/Web - Client/CarritoCliente";
 import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente"
 import Nav2_Web from "./Components/Nav2_web";
+import Register from "./Pages/Admin/Registro";
 
 // Se crea un objeto para las rutas que iran en el nav publico sin iniciar sesion, este objeto puede contener diferentes componentes, como el Nav u otros elementos como un Footer, pero el contenido preincipal es el de cada ruta
 const WebLayout = () => {
@@ -53,6 +54,7 @@ function App() {
         {/* Rutas SIN navbar */}
         <Route element={<NoLayout />}>
           <Route path="/inicioSesion" element={<Acceder />} />
+          <Route path="/admin/register" element={<Register />} />
         </Route>
 
         {/* Rutas SIN navbar */}
