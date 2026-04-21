@@ -9,6 +9,7 @@ import Acceder from "./Pages/Web - Client/Acceder";
 import DashboardClient from "./Pages/Web - Client/Dashboard";
 import CarritoCliente from "./Pages/Web - Client/CarritoCliente";
 import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente"
+import Nav2_Web from "./Components/Nav2_web";
 
 // Se crea un objeto para las rutas que iran en el nav publico sin iniciar sesion, este objeto puede contener diferentes componentes, como el Nav u otros elementos como un Footer, pero el contenido preincipal es el de cada ruta
 const WebLayout = () => {
@@ -23,7 +24,10 @@ const WebLayout = () => {
 // Otro objeto para agregar la ruta de las interfaces que iran en el nav. Aqui como solo estan las rutas de las interfaces, solamentes eso se muestra, sin ningun otro contenido
 const AuthLayout = () => {
   return (
-    <Outlet />
+    <>
+      <Nav2_Web />
+      <Outlet />
+    </>
   );
 };
 
