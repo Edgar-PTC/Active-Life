@@ -9,6 +9,7 @@ import Acceder from "./Pages/Web - Client/Acceder";
 import CarritoCliente from "./Pages/Web - Client/CarritoCliente";
 import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente"
 import Nav2_Web from "./Components/Nav2_web";
+import Gimnasios from "./pages/Web - Client/Gimnasios.jsx";
 
 // Se crea un objeto para las rutas que iran en el nav publico sin iniciar sesion, este objeto puede contener diferentes componentes, como el Nav u otros elementos como un Footer, pero el contenido preincipal es el de cada ruta
 const WebLayout = () => {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/inicioSesion" element={<Acceder />} />
           <Route path="/client/carritoCliente" element={<CarritoCliente />} />
           <Route path="/client/PagocarritoCliente" element={<PagoCarritoCliente />} />
+          <Route path="/client/Gimnasios" element={<Gimnasios />} />
         </Route>
       </Routes>
     </Router>
