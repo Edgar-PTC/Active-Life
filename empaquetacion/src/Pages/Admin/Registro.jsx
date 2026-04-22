@@ -1,4 +1,4 @@
-import { Link } from "react-router"
+import { Link } from "react-router-dom"
 import { useState, useEffect } from "react";
 
 const Register = () => {
@@ -12,7 +12,7 @@ const Register = () => {
                 <div className="flex flex-col justify-center items-center gap-5 w-full">
                     <div className="flex flex-col justify-center items-start w-full">
                         <label className="text-white" htmlFor="Name">Nombre:</label>
-                        <input className="InputAcceder rounded-lg" type="password" name="Name" id="Name" />
+                        <input className="InputAcceder rounded-lg" type="text" name="Name" id="Name" />
                     </div>
                     <div className="flex flex-col justify-center items-start w-full">
                         <label className="text-white" htmlFor="CorreoElectronico">Correo Electronico:</label>
