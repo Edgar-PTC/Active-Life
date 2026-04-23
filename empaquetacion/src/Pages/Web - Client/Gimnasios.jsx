@@ -4,12 +4,12 @@ import CardGimnasio from "../../Components/CardGimnasio.jsx";
 
 // ── Datos de ejemplo ──
 const GYMS = [
-  { id: 1, nombre: "Fitness Fusion", ciudad: "San Salvador", zona: "Apopa", imagen: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80" },
-  { id: 2, nombre: "Iron House Gym", ciudad: "San Salvador", zona: "Apopa", imagen: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=600&q=80" },
-  { id: 3, nombre: "Elite Fitness", ciudad: "San Salvador", zona: "Apopa", imagen: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80" },
-  { id: 4, nombre: "PowerZone Gym", ciudad: "San Salvador", zona: "Apopa", imagen: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&q=80" },
-  { id: 5, nombre: "Strong Body", ciudad: "San Salvador", zona: "Apopa", imagen: "https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600&q=80" },
-  { id: 6, nombre: "ActiveLife Center", ciudad: "San Salvador", zona: "Apopa", imagen: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=600&q=80" },
+  { id: 1, nombre: "Fitness Fusion", ciudad: "San Salvador", zona: "Apopa", imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg" },
+  { id: 2, nombre: "Iron House Gym", ciudad: "San Salvador", zona: "Apopa", imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg" },
+  { id: 3, nombre: "Elite Fitness", ciudad: "San Salvador", zona: "Apopa", imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg" },
+  { id: 4, nombre: "PowerZone Gym", ciudad: "San Salvador", zona: "Apopa", imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg" },
+  { id: 5, nombre: "Strong Body", ciudad: "San Salvador", zona: "Apopa", imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg" },
+  { id: 6, nombre: "ActiveLife Center", ciudad: "San Salvador", zona: "Apopa", imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg" },
 ];
 
 const PER_PAGE = 6;
@@ -20,15 +20,15 @@ const Gimnasios = () => {
   const visible = GYMS.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   return (
-    <div className="min-h-screen bg-[#a8c49a] px-8 py-8">
+    <div className="min-h-screen px-8 py-8" style={{background: 'var(--green_CFD9C7)'}}>
 
       {/* Barra de búsqueda */}
-      <SearchBar />
+      <BarraBusqueda />
 
       {/* Grid de cards */}
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {visible.map((gym) => (
-          <GymCard key={gym.id} gym={gym} />
+          <CardGimnasio key={gym.id} gym={gym} />
         ))}
       </div>
 

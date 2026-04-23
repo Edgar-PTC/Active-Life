@@ -27,9 +27,9 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
  
       <div className="flex items-center gap-8 text-2xl font-bold text-[#2c3e1f]">
         <Link to="/" className="hover:underline underline-offset-4 decoration-2 transition-all">Inicio</Link>
-        <Link to="/gimnasios" className="hover:underline underline-offset-4 decoration-2 transition-all">Gimnasios</Link>
-        <Link to="/tienda" className="hover:underline underline-offset-4 decoration-2 transition-all">Tienda</Link>
-        <Link to="/carrito" className="hover:underline underline-offset-4 decoration-2 transition-all">Carrito</Link>
+        <Link to="/client/Gimnasios" className="hover:underline underline-offset-4 decoration-2 transition-all">Gimnasios</Link>
+        <Link to="/client/tienda" className="hover:underline underline-offset-4 decoration-2 transition-all">Tienda</Link>
+        <Link to="/client/carrito" className="hover:underline underline-offset-4 decoration-2 transition-all">Carrito</Link>
       </div>
  
       {/* Perfil — píldora igual a la imagen de referencia */}
