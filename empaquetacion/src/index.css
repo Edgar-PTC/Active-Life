@@ -18,6 +18,7 @@
   --font-size-xs: 10px;
   --transition: 0.5s ease;
   --banner-height: 700px;
+  --box_shadow: 1px 2px 2px var(--black)
 }
 
 body{
@@ -32,6 +33,27 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.NavAdmin{
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 2rem;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.LinkNavAd{
+  font-family: var(--font_family);
+  font-size: var(--font-size-m); 
+  color: var(--white);
+  list-style: none;
+  transition: var(--transition);
+}
+
+.LinkNavAd:hover{
+  text-decoration: underline var(--white);
+  transition: var(--transition);
 }
 
 .NavWeb{
@@ -262,4 +284,35 @@ footer img{
 
 .ResumenCarrito::-webkit-scrollbar {
   display: none;
+}
+
+.InputPhotoGym{
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 2px dashed var(--green_81A65D);
+}
+
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

@@ -1,10 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Outlet, Link, Navigate } from "react-router-dom";
 
-// Navs y páginas públicas
+// Navs
 import Nav from "./Components/Nav1_Web";
+import Nav2_Web from "./Components/Nav2_web";
+import Nav_Admin from "./Components/Nav_Admin";
+
+//Publicas(sin iniciar sesion)
 import Home from "./Pages/Web - Client/Inicio";
 import Us from "./Pages/Web - Client/Nosotros";
 import Acceder from "./Pages/Web - Client/Acceder";
+
+//Publicas(con iniciar sesion)
 import DashboardClient from "./Pages/Web - Client/Dashboard";
 import CarritoCliente from "./Pages/Web - Client/CarritoCliente";
 import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente";
@@ -12,8 +18,11 @@ import Nav2_Web from "./Components/Nav2_web";
 import Gimnasios from "./pages/Web - Client/Gimnasios.jsx";
 import GimnasioDetalle from "./Pages/Web - Client/GimnasioDetalle.jsx";
 import PagoMembresia from "./Pages/Web - Client/PagoMembresia.jsx";
+import Gimnasios from "./pages/Web - Client/Gimnasios";
 
 // Admin
+import GimnasiosAdmin from "./Pages/Admin/Gimnasios";
+import AgregarGimnasio from "./Pages/Admin/AgregarGimnasio";
 import Register from "./Pages/Admin/Registro";
 import Membresias from "./Pages/Admin/Membresias";
 import Pedidos from "./Pages/Admin/Pedidos";
@@ -49,17 +58,7 @@ const AdminRoute = () => {
 // Layout admin
 const AdminLayout = () => (
   <>
-    <div className="bg-[#455942] text-white p-4 flex justify-between">
-      <h1 className="font-bold">Admin Panel</h1>
-
-      <div className="flex gap-4">
-        <Link to="/admin/membresias">Membresías</Link>
-        <Link to="/admin/pedidos">Pedidos</Link>
-        <Link to="/admin/primer-uso">Inicio</Link>
-        <Link to="/admin/verificar-correo">Verificar Correo</Link>
-      </div>
-    </div>
-
+    <Nav_Admin/>
     <Outlet />
   </>
 );
@@ -96,8 +95,8 @@ function App() {
           <Route element={<AdminLayout />}>
 
             {/* Redirección */}
-            <Route path="/admin" element={<Navigate to="/admin/membresias" />} />
-
+            <Route path="/admin/gimnasios/agregar" element={<AgregarGimnasio />} />
+            <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
             <Route path="/admin/membresias" element={<Membresias />} />
             <Route path="/admin/pedidos" element={<Pedidos />} />
             <Route path="/admin/primer-uso" element={<PrimerUso />} />
