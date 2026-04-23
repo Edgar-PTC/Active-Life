@@ -36,7 +36,7 @@ const PagoCarritoCliente = () => {
                         <div className="flex flex-col gap-5">
                             <div className="flex flex-row gap-10 justify-start pl-3">
                                 <div className="text-white flex flex-col items-center cursor-pointer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card-icon lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" class="lucide lucide-credit-card-icon lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
                                     Tarjeta de Credito
                                 </div>
                                 <div className="text-white flex flex-col items-center gap-0 cursor-pointer">
@@ -81,7 +81,7 @@ const PagoCarritoCliente = () => {
                     <div className="p-0 flex flex-col rounded-xl">
                         <div className="flex flex-row p-2 rounded-xl items-center justify-between" style={{ backgroundColor: "var(--green_7F9E7A)", borderBottomLeftRadius: '0px', borderBottomRightRadius: '0px'}}>
                             <div className="p-2 rounded-full" style={{ backgroundColor: "var(--green_CFD9C7)"}}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="#455942" stroke="#455942" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="#455942" stroke="#455942" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
                             </div>
                             <h2 className="text-white text-2xl">Carrito de compra</h2>
                         </div>

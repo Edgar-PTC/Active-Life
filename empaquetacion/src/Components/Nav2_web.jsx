@@ -29,7 +29,7 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
         <Link to="/" className="hover:underline underline-offset-4 decoration-2 transition-all">Inicio</Link>
         <Link to="/client/Gimnasios" className="hover:underline underline-offset-4 decoration-2 transition-all">Gimnasios</Link>
         <Link to="/client/tienda" className="hover:underline underline-offset-4 decoration-2 transition-all">Tienda</Link>
-        <Link to="/client/carrito" className="hover:underline underline-offset-4 decoration-2 transition-all">Carrito</Link>
+        <Link to="/client/carritoCliente" className="hover:underline underline-offset-4 decoration-2 transition-all">Carrito</Link>
       </div>
  
       {/* Perfil — píldora igual a la imagen de referencia */}
