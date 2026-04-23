@@ -11,6 +11,7 @@ import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente";
 import Nav2_Web from "./Components/Nav2_web";
 import Gimnasios from "./pages/Web - Client/Gimnasios.jsx";
 import GimnasioDetalle from "./Pages/Web - Client/GimnasioDetalle.jsx";
+import PagoMembresia from "./Pages/Web - Client/PagoMembresia.jsx";
 
 // Admin
 import Register from "./Pages/Admin/Registro";
@@ -87,6 +88,7 @@ function App() {
           <Route path="/client/PagocarritoCliente" element={<PagoCarritoCliente />} />
           <Route path="/client/Gimnasios" element={<Gimnasios />} />
           <Route path="/client/GimnasioDetalle" element={<GimnasioDetalle />} />
+          <Route path="/client/PagoMembresia" element={<PagoMembresia />} />
         </Route>
 
         {/* Admin */}

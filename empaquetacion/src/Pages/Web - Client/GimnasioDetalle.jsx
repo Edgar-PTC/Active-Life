@@ -1,6 +1,8 @@
 import { useParams } from "react-router";
 import { Link } from "react-router";
 
+import Reseñas from "./Reseñas";
+
 // Datos de ejemplo — reemplazar con el fecth real para mas adelante
 const GYM_DATA = {
   1: {
@@ -70,7 +72,7 @@ const GimnasioDetalle = () => {
 
 
                 {/* Botón inscribirse */}
-                <Link>
+                <Link to="/client/PagoMembresia">
                     <button className="bg-[#A3C087] mt-6 w-full md:w-1/2 mx-auto block hover:bg-[#9db87a] text-[#FFFFFF] font-regular text-lg py-3 rounded-xl transition-colors duration-200">
                         Inscribirse
                     </button>
@@ -86,9 +88,9 @@ const GimnasioDetalle = () => {
         </div>
 
         {/* Aquí irán las reseñas — por ahora placeholder */}
-        <p className="text-center text-[#3d5a30]/60 mt-6 text-sm">
-          Aún no hay reseñas para este gimnasio.
-        </p>
+        <div>
+          <Reseñas />
+        </div>
       </div>
     </div>
   );
