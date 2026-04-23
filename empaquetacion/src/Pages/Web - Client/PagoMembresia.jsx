@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router"
 
 const Array = [
-    {"id": "PR001", "image": "https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776624573/Gemini_Generated_mockup_bottle_tbpebz.png", "name": "Botella de Agua 250ml", "precioUni": 25.00, "cantidad": 1},
-    {"id": "PR002", "image": "https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776624573/Gemini_Generated_Mockup_camisetas_ax9yig.png", "name": "Camiseta Deportiva", "precioUni": 15.00, "cantidad": 2}
+    {"id": "MBR001", "name": "Membresia Patino", "gimnasioNombre": "Fitness Fusion", "precioUni": 8.99, "PeriodoPago": "Mensualmente"},
+
 ]
 
-const PagoCarritoCliente = () => {
+const PagoMembresia = () => {
     const[ArrayList, setArrayList] = useState(Array)
     const[subtotal, setSubtotal] = useState(0.00);
     const[total, setTotal] = useState(0.00);
@@ -79,22 +79,32 @@ const PagoCarritoCliente = () => {
                 <div className="rounded-xl pl-6 pr-6 pt-3 pb-3 flex flex-col justify-between" style={{background: 'var(--green_CFD9C7)'}}>
                     <h2 className="text-xl text-center">Resumen de la compra</h2>
                     <div className="p-0 flex flex-col rounded-xl">
-                        <div className="flex flex-row p-2 rounded-xl items-center justify-between" style={{ backgroundColor: "var(--green_7F9E7A)", borderBottomLeftRadius: '0px', borderBottomRightRadius: '0px'}}>
-                            <div className="p-2 rounded-full" style={{ backgroundColor: "var(--green_CFD9C7)"}}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="#455942" stroke="#455942" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                            </div>
-                            <h2 className="text-white text-2xl">Carrito de compra</h2>
-                        </div>
-                        <div className="ResumenCarrito rounded-xl flex flex-col p-0">
-                            {ArrayList.map((Producto, index) => (
-                                <div className="text-white" key={index}>
-                                    <div className="flex flex-row text-xs justify-between p-3">
-                                        <p>{Producto.name} - {Producto.cantidad} {Producto.cantidad > 1? 'unidades' : 'unidad'}</p>
-                                        <p>${Producto.precioUni}</p>
-                                    </div>
-                                    <hr />
+                       <div className="p-0 flex flex-col rounded-xl gap-3">
+                        {ArrayList.map((item) => (
+                            <div
+                            key={item.id}
+                            className="flex flex-row items-center justify-between rounded-xl p-6"
+                            style={{ background: "var(--green_7F9E7A)" }}
+                            >
+                                {/* Info de la membresía */}
+                                <div className="flex flex-col gap-1">
+                                    <p className="text-white font-regular text-sm leading-tight">{item.name}</p>
+                                    <p className="text-white/75 text-xs">{item.gimnasioNombre}</p>
                                 </div>
-                            ))}
+                        
+                            {/* Precio */}
+                            <div className="flex felx-col gap-1">
+                                <p className="text-white font-regular text-lg">${item.precioUni.toFixed(2)}</p>
+                                <span
+                                    className="text-xs font-regular px-2 py-1 rounded-full w-fit"
+                                    style={{ background: "var(--green_81A65D)", color: "#fff" }}
+                                    >
+                                    {item.PeriodoPago}
+                                </span>
+                            </div>
+                           
+                            </div>
+                        ))}
                         </div>
                     </div>
                     <div className="flex flex-col gap-3">
@@ -112,7 +122,7 @@ const PagoCarritoCliente = () => {
                             <p>${total}</p>
                         </div>
                     </div>
-                    <Link to="/client/carritoCliente" className="flex items-center gap-4 justify-center text-white p-2 rounded-lg cursor-pointer" style={{background: "var(--green_81A65D)"}}>
+                    <Link to="/client/GimnasioDetalle" className="flex items-center gap-4 justify-center text-white p-2 rounded-lg cursor-pointer" style={{background: "var(--green_81A65D)"}}>
                     Finalizar Pago
                     </Link>
                 </div>
@@ -121,4 +131,4 @@ const PagoCarritoCliente = () => {
     )
 }
 
-export default PagoCarritoCliente;
+export default PagoMembresia;
