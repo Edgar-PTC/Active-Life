@@ -2,81 +2,43 @@ import { Link } from "react-router-dom";
 
 function PrimerUso() {
   return (
-    <div className="p-6">
-      {/* Título principal */}
-      <h2 className="text-2xl font-bold mb-6">Panel de Administración</h2>
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438')",
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
-      {/* Tarjetas resumen */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* Card */}
+      <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-10 w-[450px] text-center shadow-xl border border-white/30 animate-fadeIn">
 
-        {/* Membresías */}
-        <div className="bg-white shadow-md rounded p-4 transition-all duration-300 hover:shadow-lg hover:scale-105">
-          <h3 className="text-lg font-semibold mb-2">Membresías</h3>
-          <p className="text-3xl font-bold">3</p>
-          <p className="text-gray-500 mb-3">Total registradas</p>
-
-          <Link
-            to="/admin/membresias"
-            className="bg-blue-500 text-white px-3 py-1 rounded transition-all duration-300 hover:bg-blue-600 hover:scale-105 active:scale-95"
-          >
-            Ver Membresías
-          </Link>
+        {/* Logo */}
+        <div className="flex justify-center items-center gap-2 mb-4">
+          <span className="text-2xl">💪</span>
+          <h1 className="text-xl font-bold text-white tracking-wide">
+            ACTIVELIFE
+          </h1>
         </div>
 
-        {/* Pedidos */}
-        <div className="bg-white shadow-md rounded p-4 transition-all duration-300 hover:shadow-lg hover:scale-105">
-          <h3 className="text-lg font-semibold mb-2">Pedidos</h3>
-          <p className="text-3xl font-bold">12</p>
-          <p className="text-gray-500 mb-3">Pedidos recientes</p>
+        {/* Mensaje */}
+        <h2 className="text-2xl font-bold text-white mb-3">
+          ¡No hay ningún administrador registrado!
+        </h2>
 
-          <Link
-            to="/admin/pedidos"
-            className="bg-blue-500 text-white px-3 py-1 rounded transition-all duration-300 hover:bg-blue-600 hover:scale-105 active:scale-95"
-          >
-            Ver Pedidos
-          </Link>
-        </div>
-
-        {/* Ingresos */}
-        <div className="bg-white shadow-md rounded p-4 transition-all duration-300 hover:shadow-lg hover:scale-105">
-          <h3 className="text-lg font-semibold mb-2">Ingresos</h3>
-          <p className="text-3xl font-bold">$350</p>
-          <p className="text-gray-500 mb-3">Este mes</p>
-
-          <Link
-            to="/admin/membresias"
-            className="bg-blue-500 text-white px-3 py-1 rounded transition-all duration-300 hover:bg-blue-600 hover:scale-105 active:scale-95"
-          >
-            Gestionar
-          </Link>
-        </div>
-
-      </div>
-
-      {/* Sección de bienvenida */}
-      <div className="bg-white shadow-md rounded p-6 transition-all duration-300 hover:shadow-lg">
-        <h3 className="text-xl font-semibold mb-2">Bienvenido al sistema</h3>
-        <p className="text-gray-600 mb-4">
-          Este es tu panel de administración. Desde aquí podrás gestionar las
-          membresías, revisar pedidos y controlar la información del sistema.
+        <p className="text-gray-200 mb-6">
+          Empieza creando un usuario de administrador.
         </p>
 
-        {/* Botones rápidos */}
-        <div className="flex gap-4">
-          <Link
-            to="/admin/membresias"
-            className="bg-green-600 text-white px-4 py-2 rounded transition-all duration-300 hover:bg-green-700 hover:scale-105 active:scale-95"
-          >
-            Ir a Membresías
-          </Link>
-
-          <Link
-            to="/admin/pedidos"
-            className="bg-purple-600 text-white px-4 py-2 rounded transition-all duration-300 hover:bg-purple-700 hover:scale-105 active:scale-95"
-          >
-            Ir a Pedidos
-          </Link>
-        </div>
+        {/* Botón */}
+        <Link
+          to="/admin/register"
+          className="inline-block bg-[#7F9E7A] text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-[#6e8c69] hover:scale-105 active:scale-95"
+        >
+          Registrarse
+        </Link>
       </div>
     </div>
   );
