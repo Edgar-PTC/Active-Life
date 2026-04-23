@@ -16,7 +16,7 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
  
       {/* ── Logo ── */}
       <div className="flex-shrink-0">
-        <Link to="/">
+        <Link to="/client/dashboard">
           <img
             style={{ height: 40, width: "auto", objectFit: "contain" }}
             src="https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776401728/Gemini_Generated_Logo_gyanzj.png"
@@ -26,7 +26,7 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
       </div>
  
       <div className="flex items-center gap-8 text-2xl font-bold text-[#2c3e1f]">
-        <Link to="/" className="hover:underline underline-offset-4 decoration-2 transition-all">Inicio</Link>
+        <Link to="/client/dashboard" className="hover:underline underline-offset-4 decoration-2 transition-all">Inicio</Link>
         <Link to="/client/Gimnasios" className="hover:underline underline-offset-4 decoration-2 transition-all">Gimnasios</Link>
         <Link to="/client/tienda" className="hover:underline underline-offset-4 decoration-2 transition-all">Tienda</Link>
         <Link to="/client/carritoCliente" className="hover:underline underline-offset-4 decoration-2 transition-all">Carrito</Link>
