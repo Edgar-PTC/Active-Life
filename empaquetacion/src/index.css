@@ -18,6 +18,7 @@
   --font-size-xs: 10px;
   --transition: 0.5s ease;
   --banner-height: 700px;
+  --box_shadow: 1px 2px 2px var(--black)
 }
 
 body{
@@ -283,4 +284,9 @@ footer img{
 
 .ResumenCarrito::-webkit-scrollbar {
   display: none;
+}
+
+.InputPhotoGym{
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 2px dashed var(--green_81A65D);
 }

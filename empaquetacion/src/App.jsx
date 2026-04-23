@@ -18,6 +18,7 @@ import Gimnasios from "./pages/Web - Client/Gimnasios";
 
 // Admin
 import GimnasiosAdmin from "./Pages/Admin/Gimnasios";
+import AgregarGimnasio from "./Pages/Admin/AgregarGimnasio";
 import Register from "./Pages/Admin/Registro";
 import Membresias from "./Pages/Admin/Membresias";
 import Pedidos from "./Pages/Admin/Pedidos";
@@ -88,6 +89,7 @@ function App() {
           <Route element={<AdminLayout />}>
 
             {/* Redirección */}
+            <Route path="/admin/gimnasios/agregar" element={<AgregarGimnasio />} />
             <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
             <Route path="/admin/membresias" element={<Membresias />} />
             <Route path="/admin/pedidos" element={<Pedidos />} />
