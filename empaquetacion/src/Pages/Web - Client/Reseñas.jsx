@@ -21,7 +21,7 @@ const Reseñas = () => {
       author: "María González",
       rating: 5,
       date: "10 de enero, 2024",
-      content: "Excelente producto, superó todas mis expectativas. La calidad es increíble y el servicio al cliente fue excepcional. Definitivamente lo recomendaría a mis amigos y familiares.",
+      content: "Excelente gimnasio, superó todas mis expectativas. La calidad es increíble y el servicio al cliente fue excepcional. Definitivamente lo recomendaría a mis amigos y familiares.",
       helpfulCount: 45
     },
     {
@@ -29,7 +29,7 @@ const Reseñas = () => {
       author: "Carlos Rodríguez",
       rating: 3,
       date: "5 de enero, 2024",
-      content: "Buen producto en general, pero podría mejorar en algunos aspectos. La entrega fue rápida y el empaque llegó en perfectas condiciones.",
+      content: "Buen gimnasio en general, pero podría mejorar en algunos aspectos. LAs maquinas estan en buen estado, pero hacian falta toallas para el sudor.",
       helpfulCount: 12
     }
   ];
@@ -117,7 +117,7 @@ const Reseñas = () => {
       
       {/* Botón para escribir reseña */}
       <div className="mt-8 text-center">
-        <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
+        <button className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-md hover:shadow-lg">
           Escribe tu propia reseña
         </button>
       </div>

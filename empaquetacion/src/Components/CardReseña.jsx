@@ -40,19 +40,19 @@ const CardReseña = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow">
+    <div className="bg-[#7f9e7a] rounded-lg shadow-sm border border-gray-200 p-6 mb-4 hover:shadow-md transition-shadow">
       {/* Encabezado con información del autor */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           {/* Avatar */}
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-white-600 rounded-full flex items-center justify-center text-white font-semibold">
             {author.charAt(0).toUpperCase()}
           </div>
           
           <div>
-            <h3 className="font-semibold text-gray-900">{author}</h3>
+            <h3 className="font-regular text-white">{author}</h3>
             {date && (
-              <p className="text-sm text-gray-500">{date}</p>
+              <p className="text-sm text-white">{date}</p>
             )}
           </div>
         </div>
@@ -66,14 +66,14 @@ const CardReseña = ({
       
       {/* Contenido del comentario */}
       <div className="mb-4">
-        <p className="text-gray-700 leading-relaxed">{content}</p>
+        <p className="text-white leading-relaxed">{content}</p>
       </div>
       
       {/* Botones de acción */}
       <div className="flex items-center gap-6 pt-2 border-t border-gray-100">
         <button 
           onClick={onHelpful}
-          className="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors group"
+          className="flex items-center gap-2 text-white hover:text-blue-600 transition-colors group"
         >
           <ThumbsUp className="w-4 h-4 group-hover:scale-110 transition-transform" />
           <span className="text-sm">
@@ -83,7 +83,7 @@ const CardReseña = ({
         
         <button 
           onClick={onReply}
-          className="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors group"
+          className="flex items-center gap-2 text-white hover:bg-[#455942] transition-colors group"
         >
           <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform" />
           <span className="text-sm">Responder</span>
