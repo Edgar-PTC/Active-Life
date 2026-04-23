@@ -11,7 +11,7 @@ const array = [
     {id: 7, image: "https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776624573/Gemini_Generated_Mockup_camisetas_ax9yig.png"}
 ]
 
-const ModalProductos = ({ isOpen, onClose }) => {
+const ModalProveedores = ({ isOpen, onClose }) => {
     // Cerrar con tecla ESC
     useEffect(() => {
         const handleEsc = (event) => {
@@ -41,7 +41,7 @@ const ModalProductos = ({ isOpen, onClose }) => {
                         <svg className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
                         <div className="flex flex-row justify-start items-center gap-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-plus-icon lucide-folder-plus"><path d="M12 10v6"/><path d="M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
-                            <h2 className="text-xl">Agregar Nuevo Producto</h2>
+                            <h2 className="text-xl">Agregar Nuevo Proveedor</h2>
                         </div>
                     </div>
                     <div className='flex flex-col gap-3'>
@@ -64,36 +64,25 @@ const ModalProductos = ({ isOpen, onClose }) => {
                         </div>
                         <div className='flex flex-row gap-2 w-full'>
                             <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="name">Nombre del Producto</label>
-                                <input className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="text" name="name" id="name" placeholder='Ej. Camisa sin mangas'/>
+                                <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="name">Nombre del Proveedor</label>
+                                <input className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="text" name="name" id="name" placeholder='Ej. Distribuidora Ejemplo'/>
                             </div>
                             <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="price">Precio</label>
-                                <input className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="number" name="price" id="price" placeholder='$ 0.00'/>
+                                <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="telefono">Telefono</label>
+                                <input className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="number" name="telefono" id="telefono" placeholder='Ej. 0000-0000'/>
                             </div>
                         </div>
-                        <div className='flex flex-row gap-2 w-full'>
-                            <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="categorias">Categorias</label>
-                                <input className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="text" name="categorias" id="categorias" placeholder='Ropa Hombre'/>
-                            </div>
-                            <div className='flex flex-col gap-1 w-full'>
-                                <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="proveedores">Proveedor</label>
-                                <select className='bg-white py-2 px-2 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} list="ListProveedores" name="proveedores" id="proveedores">
-                                    <option style={{color: "var(--brown)", filter: "opacity(0.2)"}} value="">Seleccionar proveedor...</option>
-                                    <option value="USA">Embajada Estadounidense</option>
-                                    <option value="UR">Rusia</option>
-                                </select>
-                                
-                            </div>
+                        <div className='flex flex-col gap-1 w-full'>
+                            <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="email">Correo Electronico</label>
+                            <input className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="email" name="email" id="email" placeholder='Ej. distibiudora_ejemplo@gmail.com'/>
                         </div>
                         <div className='flex flex-col gap-1'>
-                            <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="Descrip">Nombre del Producto</label>
-                            <textarea className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="text" name="Descrip" id="Descrip" placeholder='Describe los detalles del producto...'></textarea>
+                            <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="Descrip">Direccion</label>
+                            <textarea className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="text" name="Descrip" id="Descrip" placeholder='Ej. Avenida ejemplo...'></textarea>
                         </div>
                         <Link className='w-full flex py-2 px-5 rounded-xl items-center justify-center text-white gap-2' style={{backgroundColor: "var(--green_455942)"}} to="/admins/productos">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                            Guardar Producto
+                            Guardar proveedor
                         </Link>
                     </div>
                 </div>
@@ -102,4 +91,4 @@ const ModalProductos = ({ isOpen, onClose }) => {
     )
 }
 
-export default ModalProductos;
+export default ModalProveedores;

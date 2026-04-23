@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router"
-import ModalProductos from "../../Components/ModalProductoAdm";
 
 const AgregarGimnasio = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const openModal = () => { setIsModalOpen(true) };
-    const closeModal = () => { setIsModalOpen(false) };
-
     return(
         <main className="flex p-8 h-full min-h-screen"  style={{background: 'var(--green_CFD9C7)'}}>
             <div className="flex flex-col gap-6 w-full">
@@ -95,8 +89,7 @@ const AgregarGimnasio = () => {
                                     <h2 className="text-lg" style={{color: "var(--gray)"}}>Planes y Membresías</h2>
                                     <p className="text-xs" style={{color: "var(--gray)", filter: "opacity(0.7)"}}>Configura los precios y beneficios para este local.</p>
                                 </div>
-                                <button onClick={openModal} className="px-6 py-2 rounded-xl text-sm cursor-pointer" style={{border: "2px solid var(--green_455942)", color: "var(--gray)"}}>Agregar Membresias</button>
-                                <ModalProductos isOpen={isModalOpen} onClose={closeModal}></ModalProductos>
+                                <Link to='/admin/gimnasios/agregar/membresias' className="px-6 py-2 rounded-xl text-sm cursor-pointer" style={{border: "2px solid var(--green_455942)", color: "var(--gray)"}}>Agregar Membresias</Link>
                             </div>
                         </div>
                         <div className="flex flex-row justify-end items-center gap-6">

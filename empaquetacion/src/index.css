@@ -316,3 +316,12 @@ footer img{
     opacity: 1;
   }
 }
+
+.carruselPhotos{
+  overflow-x: auto;
+  width: 100%; 
+}
+
+.carruselPhotos::-webkit-scrollbar {
+  display: none
+}
