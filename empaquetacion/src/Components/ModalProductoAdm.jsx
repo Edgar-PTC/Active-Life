@@ -91,7 +91,7 @@ const ModalProductos = ({ isOpen, onClose }) => {
                             <label className='text-sm' style={{color: "var(--brown)", filter: "opacity(0.7)"}} htmlFor="Descrip">Nombre del Producto</label>
                             <textarea className='bg-white py-2 px-4 rounded-lg' style={{color: "var(--brown)", filter: "opacity(0.7)"}} type="text" name="Descrip" id="Descrip" placeholder='Describe los detalles del producto...'></textarea>
                         </div>
-                        <Link className='w-full flex py-2 px-5 rounded-xl items-center justify-center text-white gap-2' style={{backgroundColor: "var(--green_455942)"}} to="/admins/productos">
+                        <Link className='w-full flex py-2 px-5 rounded-xl items-center justify-center text-white gap-2' style={{backgroundColor: "var(--green_455942)"}} to="/admin/productos">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
                             Guardar Producto
                         </Link>

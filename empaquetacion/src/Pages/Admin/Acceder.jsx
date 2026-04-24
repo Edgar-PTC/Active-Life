@@ -1,7 +1,7 @@
 import { Link } from "react-router"
 import { useState, useEffect } from "react";
 
-const Acceder = () => {
+const AccederAdmin = () => {
     return(
         <main className="flex p-8 Acceder h-full items-center justify-center min-h-screen">
             <div className="flex flex-col pt-15 pb-15 pl-40 pr-40 rounded-3xl Login items-center justify-between gap-6 w-3/5">
@@ -20,14 +20,14 @@ const Acceder = () => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 items-center justify-center">
-                    <Link to="/client/dashboard" className="AccederLink pt-2 pb-2 pl-10 pr-10 flex flex-row items-center justify-center text-white text-center text-s rounded-lg ">
+                    <Link to="/admin/productos" className="AccederLink pt-2 pb-2 pl-10 pr-10 flex flex-row items-center justify-center text-white text-center text-s rounded-lg ">
                     Iniciar Sesion
                     </Link>
-                    <Link to="/admin/inicioSesion" className="text-xs text-white">Inicio de Sesion Admin</Link>
+                    <Link to="/inicioSesion" className="text-xs text-white">Inicio de Sesion</Link>
                 </div>
             </div>
         </main>
     )
 }
 
-export default Acceder;
+export default AccederAdmin;

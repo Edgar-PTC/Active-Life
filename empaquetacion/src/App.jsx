@@ -21,7 +21,9 @@ import Tienda from "./Pages/Web - Client/Tienda.jsx";
 
 
 // Admin
+import AccederAdmin from "./Pages/Admin/Acceder.jsx";
 import GimnasiosAdmin from "./Pages/Admin/Gimnasios";
+import ProductosAdmin from "./Pages/Admin/Productos.jsx";
 import AgregarGimnasio from "./Pages/Admin/AgregarGimnasio";
 import Register from "./Pages/Admin/Registro";
 import Membresias from "./Pages/Admin/Membresias";
@@ -77,6 +79,7 @@ function App() {
         {/* Sin layout */}
         <Route element={<NoLayout />}>
           <Route path="/inicioSesion" element={<Acceder />} />
+          <Route path="/admin/inicioSesion" element={<AccederAdmin />} />
           <Route path="/admin/register" element={<Register />} />
           <Route path="/admin/primer-uso" element={<PrimerUso />} />
           <Route path="/admin/verificar-correo" element={<VerificarCorreo />} />
@@ -98,6 +101,7 @@ function App() {
           <Route element={<AdminLayout />}>
 
             {/* Redirección */}
+            <Route path="/admin/productos" element={<ProductosAdmin />} />
             <Route path="/admin/gimnasios/agregar" element={<AgregarGimnasio />} />
             <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
             <Route path="/admin/gimnasios/agregar/membresias" element={<Membresias />} />
