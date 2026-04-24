@@ -17,6 +17,8 @@ import PagoCarritoCliente from "./Pages/Web - Client/PagoCarritoCliente";
 import Gimnasios from "./pages/Web - Client/Gimnasios.jsx";
 import GimnasioDetalle from "./Pages/Web - Client/GimnasioDetalle.jsx";
 import PagoMembresia from "./Pages/Web - Client/PagoMembresia.jsx";
+import Tienda from "./Pages/Web - Client/Tienda.jsx";
+
 
 // Admin
 import GimnasiosAdmin from "./Pages/Admin/Gimnasios";
@@ -88,6 +90,7 @@ function App() {
           <Route path="/client/Gimnasios" element={<Gimnasios />} />
           <Route path="/client/GimnasioDetalle" element={<GimnasioDetalle />} />
           <Route path="/client/PagoMembresia" element={<PagoMembresia />} />
+          <Route path="/client/tienda" element={<Tienda />} />
         </Route>
 
         {/* Admin */}
