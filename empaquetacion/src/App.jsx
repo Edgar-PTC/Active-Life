@@ -31,6 +31,7 @@ import Membresias from "./Pages/Admin/Membresias";
 import Pedidos from "./Pages/Admin/Pedidos";
 import PrimerUso from "./Pages/Admin/PrimerUso";
 import VerificarCorreo from "./Pages/Admin/VerificarCorreo";
+import DashboardAdmin from "./Pages/Admin/Dashboard";
 
 // Layout público
 const WebLayout = () => (
@@ -108,7 +109,7 @@ function App() {
             <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
             <Route path="/admin/gimnasios/agregar/membresias" element={<Membresias />} />
             <Route path="/admin/pedidos" element={<Pedidos />} />
-
+            <Route path="/admin/dashboard" element={<DashboardAdmin />} />
           </Route>
         </Route>
 

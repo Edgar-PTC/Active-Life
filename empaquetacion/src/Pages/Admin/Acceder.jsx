@@ -20,7 +20,7 @@ const AccederAdmin = () => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 items-center justify-center">
-                    <Link to="/admin/productos" className="AccederLink pt-2 pb-2 pl-10 pr-10 flex flex-row items-center justify-center text-white text-center text-s rounded-lg ">
+                    <Link to="/admin/dashboard" className="AccederLink pt-2 pb-2 pl-10 pr-10 flex flex-row items-center justify-center text-white text-center text-s rounded-lg ">
                     Iniciar Sesion
                     </Link>
                     <Link to="/inicioSesion" className="text-xs text-white">Inicio de Sesion</Link>
