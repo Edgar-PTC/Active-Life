@@ -18,6 +18,7 @@ import Gimnasios from "./pages/Web - Client/Gimnasios.jsx";
 import GimnasioDetalle from "./Pages/Web - Client/GimnasioDetalle.jsx";
 import PagoMembresia from "./Pages/Web - Client/PagoMembresia.jsx";
 import Tienda from "./Pages/Web - Client/Tienda.jsx";
+import ProductoDetalle from "./Pages/Web - Client/ProductoDetalle.jsx";
 
 
 // Admin
@@ -30,6 +31,7 @@ import Membresias from "./Pages/Admin/Membresias";
 import Pedidos from "./Pages/Admin/Pedidos";
 import PrimerUso from "./Pages/Admin/PrimerUso";
 import VerificarCorreo from "./Pages/Admin/VerificarCorreo";
+import DashboardAdmin from "./Pages/Admin/Dashboard";
 
 // Layout público
 const WebLayout = () => (
@@ -94,6 +96,7 @@ function App() {
           <Route path="/client/GimnasioDetalle" element={<GimnasioDetalle />} />
           <Route path="/client/PagoMembresia" element={<PagoMembresia />} />
           <Route path="/client/tienda" element={<Tienda />} />
+          <Route path="/client/productoDetalle/:id" element={<ProductoDetalle/>} />
         </Route>
 
         {/* Admin */}
@@ -106,7 +109,7 @@ function App() {
             <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
             <Route path="/admin/gimnasios/agregar/membresias" element={<Membresias />} />
             <Route path="/admin/pedidos" element={<Pedidos />} />
-
+            <Route path="/admin/dashboard" element={<DashboardAdmin />} />
           </Route>
         </Route>
 

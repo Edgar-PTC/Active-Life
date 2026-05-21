@@ -4,7 +4,7 @@ import CardGimnasio from "../../Components/CardGimnasio";
 import { Link } from "react-router";
 import CardProductDashClient from "../../Components/CardProductDashClient";
 
-const Array = [
+export const Array = [
     { "id": "PR001", "image": "https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776624573/Gemini_Generated_mockup_bottle_tbpebz.png", "name": "Botella de Agua 250ml", "precioUni": 25.00 },
     { "id": "PR002", "image": "https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776624573/Gemini_Generated_Mockup_camisetas_ax9yig.png", "name": "Camiseta Deportiva", "precioUni": 15.00 },
     { "id": "PR003", "image": "https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776624573/Gemini_Generated_Mockup_camisetas_ax9yig.png", "name": "Camiseta Deportiva", "precioUni": 15.00 },
