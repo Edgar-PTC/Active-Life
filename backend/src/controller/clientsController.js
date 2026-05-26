@@ -38,7 +38,7 @@ clientController.updateClients = async (req, res) => {
             return res.status(400).json({message: "la fecha no puede ser hoy o una en un futuro"})
         }
 
-        if(name.lenght < 3){
+        if(name && name.lenght < 3){
             return res.status(400).json({message: "name too short"})
         }
 
