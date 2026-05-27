@@ -20,7 +20,8 @@ logInClientsController.login = async(req, res) => {
 
         //#2.5 verificar si la cuenta esta bloqueada
         if(userFound.timeOut && userFound.timeOut > Date.now()){
-            return res.status(403).json({message: "Cuenta bloqueada"})
+            const time = userFound.timeOut - Date.now();
+            return res.status(403).json({message: "Cuenta bloqueada", time: time})
         }
 
         //#3 Verificar la contraseña
@@ -37,7 +38,7 @@ logInClientsController.login = async(req, res) => {
                 userFound.loginAttemps = 0;
 
                 await userFound.save();
-                return res.status(403).json({message: "Cuenta bloqueada"})
+                return res.status(403).json({message: "Cuenta bloqueada", time: 15 * 60  * 1000})
             }
 
             await userFound.save();

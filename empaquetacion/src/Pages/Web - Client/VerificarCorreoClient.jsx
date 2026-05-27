@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router"
+import Swal from 'sweetalert2'
 
 const VerificarCorreo = () => {
   const navigate = useNavigate();
@@ -40,7 +41,8 @@ const VerificarCorreo = () => {
           position: "top-end",
           title: 'Por favor digita el codigo completo',
           icon: 'error',
-          timer: 2500
+          timer: 2500,
+          showConfirmButton: false,
         });
         return;
       }
@@ -63,8 +65,9 @@ const VerificarCorreo = () => {
           title: 'Verificacion Correcta. ¡Bienvenido!',
           icon: 'success',
           timer: 2500,
+          showConfirmButton: false,
           willClose: () => {
-              navigate("inicioSesion");   
+              navigate("/inicioSesion");   
         }
       });
       }else{
@@ -74,14 +77,16 @@ const VerificarCorreo = () => {
             position: "top-end",
             title: 'Codigo incorrecto. ¡Vuelve a intentarlo!',
             icon: 'error',
-            timer: 1500
+            timer: 1500,
+            showConfirmButton: false,
           });
         }else{
           Swal.fire({
             position: "top-end",
             title: 'Error interno Verificando el correo. ¡Vuelve a intentarlo!',
             icon: 'error',
-            timer: 2500
+            timer: 2500,
+            showConfirmButton: false,
           });
         }
         return;
@@ -92,7 +97,8 @@ const VerificarCorreo = () => {
         position: "top-end",
         title: 'Error interno del servidor',
         icon: 'error',
-        timer: 2500
+        timer: 2500,
+        showConfirmButton: false,
       });
     }finally{
       setLoading(false);

@@ -19,7 +19,8 @@ const Register = () => {
                 position: "top-end",
                 title: 'Por favor complete todos los datos',
                 icon: 'error',
-                timer: 2500
+                timer: 2500,
+                showConfirmButton: false,
             });
             return;
         }
@@ -29,7 +30,8 @@ const Register = () => {
                 position: "top-end",
                 title: 'La contraseña debe contener almenos 5 caracteres',
                 icon: 'error',
-                timer: 2500
+                timer: 2500,
+                showConfirmButton: false,
             });
             return;
         }
@@ -39,7 +41,8 @@ const Register = () => {
                 position: "top-end",
                 title: 'La confirmacion de contraseña no coincide con la contraseña',
                 icon: 'error',
-                timer: 2500
+                timer: 2500,
+                showConfirmButton: false,
             });
             return;
         }
@@ -69,35 +72,40 @@ const Register = () => {
                         position: "top-end",
                         title: 'Todos los campos deben ser rellenados',
                         icon: 'error',
-                        timer: 2500
+                        timer: 2500,
+                        showConfirmButton: false,
                     });
                 }else if(response.message == "Fecha invalida"){
                     Swal.fire({
                         position: "top-end",
                         title: 'La fecha no puede ser hoy o una fecha futura',
                         icon: 'error',
-                        timer: 2500
+                        timer: 2500,
+                        showConfirmButton: false,
                     });
                 }else if(response.message == "email already in use"){
                     Swal.fire({
                         position: "top-end",
                         title: 'El correo ingresado ya le pertenece a otro usuario',
                         icon: 'error',
-                        timer: 2500
+                        timer: 2500,
+                        showConfirmButton: false,
                     });
                 }else if(response.message == "Password invalid"){
                     Swal.fire({
                         position: "top-end",
                         title: 'La fecha no puede ser hoy o una fecha futura',
                         icon: 'error',
-                        timer: 2500
+                        timer: 2500,
+                        showConfirmButton: false,
                     });
                 }else{
                     Swal.fire({
                         position: "top-end",
                         title: 'Error interno del servidor. Vuelve a intentarlo',
                         icon: 'error',
-                        timer: 2500
+                        timer: 2500,
+                        showConfirmButton: false,
                     });
                 }
                 return;
@@ -108,6 +116,7 @@ const Register = () => {
                 title: 'Registro exitoso. Pasando a la verificacion de correo',
                 icon: 'success',
                 timer: 2500,
+                showConfirmButton: false,
                 willClose: () => {
                     navigate("/verificarCorreo");
                 }
