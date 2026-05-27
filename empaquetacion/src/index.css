@@ -21,6 +21,8 @@
   --box_shadow: 1px 2px 2px var(--black)
 }
 
+@import "tailwindcss";
+
 body{
   user-select: none;
   margin: 0;

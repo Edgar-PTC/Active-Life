@@ -8,7 +8,9 @@ import Nav_Admin from "./Components/Nav_Admin";
 //Publicas(sin iniciar sesion)
 import Home from "./Pages/Web - Client/Inicio";
 import Us from "./Pages/Web - Client/Nosotros";
-import Acceder from "./Pages/Web - Client/Acceder";
+import AccederClient from "./Pages/Web - Client/Acceder";
+import RegisterClient from "./Pages/Web - Client/RegistroClient.jsx";
+import VerificarCorreoClient from "./Pages/Web - Client/VerificarCorreoClient.jsx";
 
 //Publicas(con iniciar sesion)
 import DashboardClient from "./Pages/Web - Client/Dashboard";
@@ -26,11 +28,11 @@ import AccederAdmin from "./Pages/Admin/Acceder.jsx";
 import GimnasiosAdmin from "./Pages/Admin/Gimnasios";
 import ProductosAdmin from "./Pages/Admin/Productos.jsx";
 import AgregarGimnasio from "./Pages/Admin/AgregarGimnasio";
-import Register from "./Pages/Admin/Registro";
+import RegisterAdmin from "./Pages/Admin/Registro";
 import Membresias from "./Pages/Admin/Membresias";
 import Pedidos from "./Pages/Admin/Pedidos";
 import PrimerUso from "./Pages/Admin/PrimerUso";
-import VerificarCorreo from "./Pages/Admin/VerificarCorreo";
+import VerificarCorreoAdmin from "./Pages/Admin/VerificarCorreo";
 import DashboardAdmin from "./Pages/Admin/Dashboard";
 
 // Layout público
@@ -80,11 +82,13 @@ function App() {
 
         {/* Sin layout */}
         <Route element={<NoLayout />}>
-          <Route path="/inicioSesion" element={<Acceder />} />
+          <Route path="/inicioSesion" element={<AccederClient />} />
+          <Route path="/register" element={<RegisterClient />} />
+          <Route path="/verificarCorreo" element={<VerificarCorreoClient />} />
           <Route path="/admin/inicioSesion" element={<AccederAdmin />} />
-          <Route path="/admin/register" element={<Register />} />
-          <Route path="/admin/primer-uso" element={<PrimerUso />} />
-          <Route path="/admin/verificar-correo" element={<VerificarCorreo />} />
+          <Route path="/admin/register" element={<RegisterAdmin />} />
+          <Route path="/admin/primerUso" element={<PrimerUso />} />
+          <Route path="/admin/verificarCorreo" element={<VerificarCorreoAdmin />} />
         </Route>
 
         {/* Cliente */}

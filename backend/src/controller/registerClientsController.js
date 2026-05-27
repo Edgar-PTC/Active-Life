@@ -21,11 +21,11 @@ registerClientController.insertClients = async (req, res) => {
         password = password?.trim();
 
         if(!name || !email || !password){
-            return res.status(400).json({message: "Todos los campos son requeridos"})
+            return res.status(400).json({message: "Campos incompletos"})
         }
 
         if(birthDate >= Date.now()){
-            return res.status(400).json({message: "la fecha no puede ser hoy o una en un futuro"})
+            return res.status(400).json({message: "Fecha invalida"})
         }
 
         if(name.lenght < 3){
@@ -39,7 +39,7 @@ registerClientController.insertClients = async (req, res) => {
         }
 
         if(password.lenght < 5){
-            return res.status(400).json({message: "The password must be at least 5 characters long."})
+            return res.status(400).json({message: "Password invalid"})
         }
 
         //encriptar contraseña
@@ -119,7 +119,7 @@ registerClientController.verifyCode = async (req, res) => {
 
         res.clearCookie("verificationTokenCookie")
 
-        res.json({message: "Email. verified successfully"})
+        return res.status(200).json({message: "Email verified successfully"})
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
