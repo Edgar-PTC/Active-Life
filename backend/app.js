@@ -9,6 +9,12 @@ import cookieParser from 'cookie-parser';
 import cors from "cors"
 import limiter from './src/middlewares/rateLimiter.js';
 import { config } from './config.js';
+import registerEmployeesRoute from "./src/routes/registerEmployeesRoute.js";
+import loginEmployeesRoute from "./src/routes/loginEmployeesRoute.js";
+import employeesRoute from "./src/routes/employeesRoute.js";
+import adminsRoute from "./src/routes/adminsRoute.js";
+import registerAdminRoute from "./src/routes/registerAdminRoute.js";
+import loginAdminRoute from "./src/routes/loginAdminRoute.js";
 
 const app = express();
 
@@ -28,6 +34,11 @@ app.use(express.json());
 //endpoints
 app.use("/apiActiveLife/clients", clientsRouter);
 app.use("/apiActiveLife/registerClients", registerClientRoute);
+app.use("/api/registerAdmin",registerAdminRoute);
+app.use("/api/loginAdmin",loginAdminRoute);
+app.use("/api/loginEmployee",loginEmployeesRoute);
+app.use("/api/employees",employeesRoute);
+app.use("/api/registerEmployee",registerEmployeesRoute);
 app.use("/apiActiveLife/logInClients", logInClientsRoute);
 app.use("/apiActiveLife/recoveryPasswordClient", recoveryPasswordClientRoute);
 app.use("/apiActiveLife/products", productRoute);
