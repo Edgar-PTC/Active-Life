@@ -1,4 +1,4 @@
-function BarraBusqueda() {
+function BarraBusqueda({onChange}) {
   return (
     <div className="flex items-center gap-3 bg-[#7a9e6e] rounded-xl px-5 py-3 w-full max-w-[1535px]">
         {/* Ícono lupa */}
@@ -12,6 +12,7 @@ function BarraBusqueda() {
             type="text"
             placeholder="Buscar"
             className="bg-transparent text-white placeholder-white/80 text-lg font-semibold outline-none w-full"
+            onChange={(e) => onChange(e.currentTarget.value)}
         />
     </div>
   );

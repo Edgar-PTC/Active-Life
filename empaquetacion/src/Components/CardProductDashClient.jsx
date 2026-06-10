@@ -17,12 +17,12 @@ const CardProductDashClient = ({ Producto }) => {
             <div className="p-5 text-white flex flex-row justify-between items-center gap-3">
                 <div className="flex flex-col">
                     <h2 className="text-lg">{Producto.name}</h2>
-                    <p className="text-m">${Producto.precioUni}</p>
+                    <p className="text-m">${Producto.price}</p>
                 </div>
                 <span className="flex flex-row">
                     {mostrarBoton && (
                         <Link
-                            to={`/client/productoDetalle/${Producto.id}`}
+                            to={`/client/productoDetalle/${Producto._id}`}
                             className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 hover:scale-105 transition transform"
                         >
                             Ver detalles

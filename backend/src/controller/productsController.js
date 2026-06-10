@@ -25,6 +25,20 @@ productsController.getById = async (req, res) => {
     }
 }
 
+productsController.getByName = async (req, res) => {
+    try {
+        let { name } = req.body;
+        
+        const products = await productsModel.find({
+            name: { $regex: name, $options: "i"}
+        })
+        return res.status(200).json(products);
+    } catch (error) {
+        console.log("Error: " + error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
 productsController.insert = async (req, res) => {
     try {
         let { name, priceRequest, category, description } = req.body;

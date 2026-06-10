@@ -13,4 +13,6 @@ productRoute.route("/:id")
 .delete(productsController.delete)
 .put(upload.single("image"), productsController.update)
 
+productRoute.route("/getByName").post(productsController.getByName)
+
 export default productRoute;

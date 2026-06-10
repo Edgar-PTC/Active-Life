@@ -5,6 +5,8 @@ import registerClientRoute from './src/routes/registerClientsRoute.js';
 import logInClientsRoute from './src/routes/logInClientsRoute.js';
 import recoveryPasswordClientRoute from './src/routes/recoveryPasswordClientRoute.js';
 import productRoute from './src/routes/productsRoute.js';
+import carShopRoute from './src/routes/carShopRoute.js';
+import authRoute from './src/routes/authRoute.js'
 import cookieParser from 'cookie-parser';
 import cors from "cors"
 import limiter from './src/middlewares/rateLimiter.js';
@@ -31,5 +33,7 @@ app.use("/apiActiveLife/registerClients", registerClientRoute);
 app.use("/apiActiveLife/logInClients", logInClientsRoute);
 app.use("/apiActiveLife/recoveryPasswordClient", recoveryPasswordClientRoute);
 app.use("/apiActiveLife/products", productRoute);
+app.use("/apiActiveLife/carShop", carShopRoute);
+app.use("/apiActiveLife/auth", authRoute);
 
 export default app;
