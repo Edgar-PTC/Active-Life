@@ -88,7 +88,6 @@ function App() {
           <Route path="/admin/inicioSesion" element={<AccederAdmin />} />
           <Route path="/admin/register" element={<RegisterAdmin />} />
           <Route path="/admin/primerUso" element={<PrimerUso />} />
-          <Route path="/admin/verificarCorreo" element={<VerificarCorreoAdmin />} />
         </Route>
 
         {/* Cliente */}
@@ -111,8 +110,9 @@ function App() {
             <Route path="/admin/productos" element={<ProductosAdmin />} />
             <Route path="/admin/gimnasios/agregar" element={<AgregarGimnasio />} />
             <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
-            <Route path="/admin/gimnasios/agregar/membresias" element={<Membresias />} />
+            <Route path="/admin/membresias" element={<Membresias />} />
             <Route path="/admin/pedidos" element={<Pedidos />} />
+            <Route path="/admin/verificaciones" element={<VerificarCorreoAdmin />} />
             <Route path="/admin/dashboard" element={<DashboardAdmin />} />
           </Route>
         </Route>
