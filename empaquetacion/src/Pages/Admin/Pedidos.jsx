@@ -77,14 +77,14 @@ function Pedidos() {
       {/* Tabla */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-100 text-gray-600 text-sm">
-            <tr>
-              <th className="p-4 text-left">ID</th>
-              <th className="p-4 text-left">Nombre del cliente</th>
-              <th className="p-4 text-left">Producto</th>
-              <th className="p-4 text-left">Total</th>
-              <th className="p-4 text-left">Estado</th>
-              <th className="p-4 text-left">Acciones</th>
+          <thead>
+            <tr style={{ background: "var(--green_7F9E7A)" }}>
+              <th className="p-4 text-left text-white">ID</th>
+              <th className="p-4 text-left text-white">Nombre del cliente</th>
+              <th className="p-4 text-left text-white">Producto</th>
+              <th className="p-4 text-left text-white">Total</th>
+              <th className="p-4 text-left text-white">Estado</th>
+              <th className="p-4 text-left text-white">Acciones</th>
             </tr>
           </thead>
 

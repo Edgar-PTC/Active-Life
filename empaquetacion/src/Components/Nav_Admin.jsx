@@ -8,7 +8,9 @@ function Nav_Admin() {
                 <Link to="/admin/dashboard" className="LinkNavAd">Dashboard</Link>
                 <Link to="/admin/productos" className="LinkNavAd">Productos</Link>
                 <Link to="/admin/gimnasios" className="LinkNavAd">Gimnasios</Link>
+                <Link to="/admin/membresias" className="LinkNavAd">Membresías</Link>
                 <Link to="/admin/pedidos" className="LinkNavAd">Pedidos</Link>
+                <Link to="/admin/verificaciones" className="LinkNavAd">Verificaciones</Link>
             </ul>
         </nav>
     )

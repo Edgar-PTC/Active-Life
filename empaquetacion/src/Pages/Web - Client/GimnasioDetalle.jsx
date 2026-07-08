@@ -10,6 +10,8 @@ const GYM_DATA = {
     descripcion: "Somos el gimnasio líder en San Salvador con más de 10 años de experiencia. Contamos con equipos de última generación, entrenadores certificados y un ambiente motivador para alcanzar tus metas.",
     direccion: "Calle La Mascota #425, Colonia San Benito, San Salvador.",
     cuota: "$8.99 mensuales",
+    precio: 8.99,
+    periodoPago: "Mensualmente",
     imagen: "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg",
   },
 };
@@ -72,7 +74,17 @@ const GimnasioDetalle = () => {
 
 
                 {/* Botón inscribirse */}
-                <Link to="/client/PagoMembresia">
+                <Link
+                    to="/client/PagoMembresia"
+                    state={{
+                        membresia: {
+                            name: "Membresía " + gym.nombre,
+                            gimnasioNombre: gym.nombre,
+                            precioUni: gym.precio,
+                            PeriodoPago: gym.periodoPago
+                        }
+                    }}
+                >
                     <button className="bg-[#A3C087] mt-6 w-full md:w-1/2 mx-auto block hover:bg-[#9db87a] text-[#FFFFFF] font-regular text-lg py-3 rounded-xl transition-colors duration-200">
                         Inscribirse
                     </button>

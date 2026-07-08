@@ -31,7 +31,7 @@ carShopController.getByCliente = async (req, res) => {
         const { customerId } = req.body;
 
         const cart = await CarModel.findOne({
-            customerId: customerId, status: "Activo"
+            customerId: customerId, status: "active"
         });
 
         if(!cart){
