@@ -65,9 +65,12 @@ const Register = () => {
                 credentials: "include",
             });
 
+            console.log(response);
+
             if(!response.ok){
                 const json = await response.json();
-                if(response.message == "Campos incompletos"){
+                console.log(json);
+                if(json.message == "Campos incompletos"){
                     Swal.fire({
                         position: "top-end",
                         title: 'Todos los campos deben ser rellenados',
@@ -75,7 +78,7 @@ const Register = () => {
                         timer: 2500,
                         showConfirmButton: false,
                     });
-                }else if(response.message == "Fecha invalida"){
+                }else if(json.message == "Fecha invalida"){
                     Swal.fire({
                         position: "top-end",
                         title: 'La fecha no puede ser hoy o una fecha futura',
@@ -83,7 +86,7 @@ const Register = () => {
                         timer: 2500,
                         showConfirmButton: false,
                     });
-                }else if(response.message == "email already in use"){
+                }else if(json.message == "email already in use"){
                     Swal.fire({
                         position: "top-end",
                         title: 'El correo ingresado ya le pertenece a otro usuario',
@@ -91,7 +94,7 @@ const Register = () => {
                         timer: 2500,
                         showConfirmButton: false,
                     });
-                }else if(response.message == "Password invalid"){
+                }else if(json.message == "Password invalid"){
                     Swal.fire({
                         position: "top-end",
                         title: 'La fecha no puede ser hoy o una fecha futura',
