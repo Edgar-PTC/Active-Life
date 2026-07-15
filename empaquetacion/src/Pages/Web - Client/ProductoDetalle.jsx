@@ -2,20 +2,13 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useProducts from "../../hooks/useProducts";
-import useAuth from "../../hooks/useAuth";
 import useCarShop from "../../hooks/useCarShop";
 
 const ProductoDetalle = () => {
   const { id } = useParams();
   const { getProductDetail, productoDetail } = useProducts();
   const [ cantidad, setCantidad ] = useState(0);
-  const { verify, Id } = useAuth();
   const { guardarLocalCarrito } = useCarShop();
-
-  useEffect(() => {
-    verify();
-    getProductDetail(id);
-  }, [])
 
   return (
     <div className="min-h-screen bg-[#CFD9C7] px-8 py-6">

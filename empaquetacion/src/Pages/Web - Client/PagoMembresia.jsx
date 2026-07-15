@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
-import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 
 const PagoMembresia = () => {
-    const { Id, verify } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 

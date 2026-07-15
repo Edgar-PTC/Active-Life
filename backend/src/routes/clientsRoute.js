@@ -9,5 +9,6 @@ clientsRouter.route("/")
 clientsRouter.route("/:id")
 .delete(clientController.deleteClients)
 .put(clientController.updateClients)
+.get(clientController.getClientId)
 
 export default clientsRouter;
