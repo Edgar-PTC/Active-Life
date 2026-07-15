@@ -7,4 +7,6 @@ salesRoute.route("/")
     .get(salesController.getAllSales)
     .post(salesController.createSale);
 
+salesRoute.route("/salesClient").post(salesController.buscarPorCliente);
+
 export default salesRoute;

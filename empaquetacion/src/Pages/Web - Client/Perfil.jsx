@@ -14,7 +14,9 @@ import {
   CircleDot,
   Home,
   ShoppingBag,
+  PackageIcon,
   LayoutGrid,
+  CalendarIcon
 } from "lucide-react";
 import { useAuth } from "../../Context/clientContext";
 import usePerfil from "../../hooks/usePerfil";
@@ -163,7 +165,7 @@ export default function ActiveLifeSettings() {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const { logOut } = useAuth();
     const { id } = useParams();
-    const { nombre, email, birthdate, me, update } = usePerfil();
+    const { nombre, email, birthdate, me, update, sales } = usePerfil();
 
     const handleSaveProfile = (updated) => {
       update(updated);
@@ -249,6 +251,53 @@ export default function ActiveLifeSettings() {
             </button>
           </aside>
         </div>
+        <section className="mt-10">
+          <h2 className="text-xs font-semibold tracking-wider uppercase text-[#5A6E56] mb-3">
+            Ventas anteriores
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            {sales.length === 0 ? "No hay ventas en este perfil" : (sales.map((sale) => (
+              <div
+                key={sale.id}
+                className="bg-[#F7F8F2] rounded-2xl border border-[#D6E0CC] p-5 flex flex-col gap-3 hover:border-[#7F9E7A] transition-colors"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <span className="w-10 h-10 rounded-xl bg-[#E7EDDF] flex items-center justify-center shrink-0">
+                    <PackageIcon className="w-5 h-5 text-[#455942]" />
+                  </span>
+                  <span
+                    className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
+                      sale.status?  "bg-[#E7EDDF] text-[#455942]" : ""
+                    }`}
+                  >
+                    {sale.status}
+                  </span>
+                </div>
+    
+                <div>
+                  <p className="font-display font-semibold text-[#263821] leading-snug">
+                    {sale.product}
+                  </p>
+                  <p className="text-xs text-[#8A9782] mt-0.5">{sale.id}</p>
+                </div>
+    
+                <div className="flex items-center justify-between pt-3 border-t border-[#E2E8D8]">
+                  <span className="flex items-center gap-1.5 text-xs text-[#5A6E56]">
+                    <CalendarIcon className="w-3.5 h-3.5" />
+                    {new Date(sale.date).toLocaleDateString("es-SV", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span className="font-display font-semibold text-[#455942]">
+                    ${sale.amount.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            )))}
+          </div>
+        </section>
       </main>
 
       <EditProfileModal
