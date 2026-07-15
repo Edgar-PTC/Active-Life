@@ -12,6 +12,19 @@ clientController.getClients = async (req, res) => {
     }
 }
 
+clientController.getClientId = async (req, res) => {
+    try {
+        const get = await clientsModel.findById(req.params.id);
+        if (!get) {
+            return res.status(404).json({message: "Cliente no encontrado"})
+        }
+        return res.status(200).json(get);
+    } catch (error) {
+        console.log("Error: " + error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
 clientController.deleteClients = async (req, res) => {
     try {
         const deleteClient = await clientsModel.findByIdAndDelete(req.params.id)
@@ -34,7 +47,7 @@ clientController.updateClients = async (req, res) => {
         name = name?.trim();
         email = email?.trim();
 
-        if(birthDate && birthday >= Date.now()){
+        if(birthDate && birthDate >= Date.now()){
             return res.status(400).json({message: "la fecha no puede ser hoy o una en un futuro"})
         }
 

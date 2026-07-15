@@ -1,10 +1,13 @@
 import { Link } from "react-router";
+import { useAuth } from "../Context/clientContext";
 
 const AVATAR_URL = null; // reemplaza con la URL real o pasa como prop
  
-function Nav2_Web({ userName = "Edgar Ariel" }) {
+function Nav2_Web() {
 
-    const initials = userName
+  const { Nombre, Id } = useAuth();
+
+    const initials = Nombre
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -25,7 +28,7 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
         </Link>
       </div>
  
-      <div className="flex items-center gap-8 text-2xl font-bold text-[#2c3e1f]">
+      <div className="flex items-center not-sm:hidden gap-8 text-2xl font-bold text-[#2c3e1f]">
         <Link to="/client/dashboard" className="hover:underline underline-offset-4 decoration-2 transition-all">Inicio</Link>
         <Link to="/client/Gimnasios" className="hover:underline underline-offset-4 decoration-2 transition-all">Gimnasios</Link>
         <Link to="/client/tienda" className="hover:underline underline-offset-4 decoration-2 transition-all">Tienda</Link>
@@ -33,11 +36,11 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
       </div>
  
       {/* Perfil — píldora igual a la imagen de referencia */}
-      <div className="flex items-center gap-3 bg-white/30 hover:bg-white/40 transition-colors cursor-pointer rounded-full pl-1 pr-4 py-1 select-none">
+      <Link to={`client/perfil/${Id}`} className="flex items-center gap-3 bg-white/30 hover:bg-white/40 transition-colors cursor-pointer rounded-full pl-1 pr-4 py-1 select-none">
         {AVATAR_URL ? (
           <img
             src={AVATAR_URL}
-            alt={userName}
+            alt={Nombre}
             className="w-9 h-9 rounded-full object-cover flex-shrink-0"
           />
         ) : (
@@ -46,9 +49,9 @@ function Nav2_Web({ userName = "Edgar Ariel" }) {
           </div>
         )}
         <span className="text-base font-semibold text-[#2c3e1f] whitespace-nowrap">
-          {userName}
+          {Nombre}
         </span>
-      </div>
+      </Link>
  
     </nav>
   );

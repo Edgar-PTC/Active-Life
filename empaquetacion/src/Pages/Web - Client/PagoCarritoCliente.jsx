@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import useAuth from "../../hooks/useAuth";
+import {useAuth} from "../../Context/clientContext";
 import Swal from "sweetalert2";
 
 const PagoCarritoCliente = () => {
-    const { Id, verify } = useAuth();
+    const { Id } = useAuth();
     const navigate = useNavigate();
 
     const [productos, setProductos] = useState([]);
@@ -18,10 +18,6 @@ const PagoCarritoCliente = () => {
     const [numeroTarjeta, setNumeroTarjeta] = useState("");
     const [fechaExp, setFechaExp] = useState("");
     const [cvv, setCvv] = useState("");
-
-    useEffect(() => {
-        verify();
-    }, []);
 
     useEffect(() => {
         if (Id) cargarCarrito();
