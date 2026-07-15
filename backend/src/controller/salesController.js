@@ -6,8 +6,31 @@ const salesController = {};
 
 salesController.getAllSales = async (req, res) => {
     try {
-        const sales = await salesModel.find().populate("shoppingCartId");
+        const sales = await salesModel.find().populate({
+            path: "shoppingCartId",
+            populate: [
+                { path: "clientId", select: "name email" },
+                { path: "products.productId", select: "name price image category" }
+            ]
+        });
         return res.status(200).json(sales);
+    } catch (error) {
+        console.log("error " + error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+salesController.updateStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const allowedStatuses = ["Pendiente", "Completado", "Cancelado"];
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).json({ message: "Estado inv\u00e1lido" });
+        }
+
+        const sale = await salesModel.findByIdAndUpdate(req.params.id, { status }, { new: true });
+        if (!sale) return res.status(404).json({ message: "Pedido no encontrado" });
+        return res.status(200).json(sale);
     } catch (error) {
         console.log("error " + error);
         return res.status(500).json({ message: "Internal server error" });

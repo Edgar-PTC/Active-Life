@@ -9,4 +9,6 @@ salesRoute.route("/")
 
 salesRoute.route("/salesClient").post(salesController.buscarPorCliente);
 
+salesRoute.route("/:id").put(salesController.updateStatus);
+
 export default salesRoute;

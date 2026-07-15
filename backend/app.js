@@ -39,6 +39,7 @@ app.use("/apiActiveLife/clients", clientsRouter);
 app.use("/apiActiveLife/registerClients", registerClientRoute);
 app.use("/apiActiveLife/registerAdmin",registerAdminRoute);
 app.use("/apiActiveLife/loginAdmin",loginAdminRoute);
+app.use("/apiActiveLife/admins", adminsRoute);
 app.use("/apiActiveLife/loginEmployee",loginEmployeesRoute);
 app.use("/apiActiveLife/employees",employeesRoute);
 app.use("/apiActiveLife/registerEmployee",registerEmployeesRoute);
