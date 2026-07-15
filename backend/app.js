@@ -18,6 +18,8 @@ import adminsRoute from "./src/routes/adminsRoute.js";
 import registerAdminRoute from "./src/routes/registerAdminsRoute.js";
 import loginAdminRoute from "./src/routes/loginAdminRoute.js";
 import salesRoute from "./src/routes/salesRoute.js";
+import gymRoute from "./src/routes/gymRoute.js";
+import gymComments from "./src/routes/gymCommentsRoute.js"
 
 const app = express();
 
@@ -47,6 +49,8 @@ app.use("/apiActiveLife/recoveryPasswordClient", recoveryPasswordClientRoute);
 app.use("/apiActiveLife/products", productRoute);
 app.use("/apiActiveLife/carShop", carShopRoute);
 app.use("/apiActiveLife/sales", salesRoute);
+app.use("/apiActiveLife/gyms", gymRoute);
 app.use("/apiActiveLife/auth", authRoute);
+app.use("/apiActiveLife/gymComments", gymComments);
 
 export default app;
