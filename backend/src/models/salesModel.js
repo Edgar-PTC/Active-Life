@@ -21,4 +21,4 @@ const saleSchema = new Schema({
     strict: false
 });
 
-export default model("salesModel", saleSchema);
+export default model("SalesModel", saleSchema, "SalesModel");
