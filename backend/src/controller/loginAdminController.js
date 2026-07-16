@@ -6,43 +6,22 @@ import { config } from "../../config.js";
 
 const loginAdminController = {};
 
-loginAdminController.login = async (
-  req,
-  res
-) => {
+loginAdminController.login = async ( req, res ) => {
   try {
     // 1. Obtener datos
-    const { email, password } =
-      req.body;
+    const { email, password } = req.body;
 
     // 2. Buscar admin
-    const userFound =
-      await adminsModel.findOne({
-        email,
-      });
+    const userFound = await adminsModel.findOne({ email });
 
     if (!userFound) {
-      return res.status(404).json({
-        message:
-          "Email no encontrado",
-      });
+      return res.status(404).json({ message: "Email no encontrado" });
     }
 
     // 3. Verificar si cuenta está bloqueada
-    if (
-      userFound.timeOut &&
-      userFound.timeOut >
-        Date.now()
-    ) {
-      const time =
-        userFound.timeOut -
-        Date.now();
-
-      return res.status(403).json({
-        message:
-          "Cuenta bloqueada",
-        time,
-      });
+    if (userFound.timeOut && userFound.timeOut > Date.now()) {
+      const time = userFound.timeOut - Date.now();
+      return res.status(403).json({ message: "Cuenta bloqueada", time, });
     }
 
     // 4. Comparar contraseña
@@ -87,9 +66,7 @@ loginAdminController.login = async (
     }
 
     // 5. Verificar correo
-    if (
-      !userFound
-        .emailVerification
+    if (!userFound.emailVerification
     ) {
       return res.status(403).json({
         message:
@@ -125,6 +102,8 @@ loginAdminController.login = async (
     return res.status(200).json({
       message:
         "Inicio de sesión exitoso",
+      Id: userFound._id,
+      Nombre: userFound.name,
     });
   } catch (error) {
     console.log(

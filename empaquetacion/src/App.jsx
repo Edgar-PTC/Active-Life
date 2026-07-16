@@ -11,6 +11,8 @@ import Us from "./Pages/Web - Client/Nosotros";
 import AccederClient from "./Pages/Web - Client/Acceder";
 import RegisterClient from "./Pages/Web - Client/RegistroClient.jsx";
 import VerificarCorreoClient from "./Pages/Web - Client/VerificarCorreoClient.jsx";
+import RecuperacionContraClient from "./Pages/Web - Client/RecuperacionContra.jsx";
+import RecuperacionContraAdmin from "./Pages/Admin/RecuperacionContra.jsx";
 
 //Publicas(con iniciar sesion)
 import DashboardClient from "./Pages/Web - Client/Dashboard";
@@ -91,6 +93,8 @@ function App() {
           <Route path="/inicioSesion" element={<AccederClient />} />
           <Route path="/register" element={<RegisterClient />} />
           <Route path="/verificarCorreo" element={<VerificarCorreoClient />} />
+          <Route path="/Recuperacion" element={<RecuperacionContraClient />} />
+          <Route path="/admin/Recuperacion" element={<RecuperacionContraAdmin />} />
           <Route path="/admin/inicioSesion" element={<AccederAdmin />} />
           <Route path="/admin/register" element={<RegisterAdmin />} />
           <Route path="/admin/primerUso" element={<PrimerUso />} />

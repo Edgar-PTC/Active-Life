@@ -4,6 +4,7 @@ import clientsRouter from './src/routes/clientsRoute.js';
 import registerClientRoute from './src/routes/registerClientsRoute.js';
 import logInClientsRoute from './src/routes/logInClientsRoute.js';
 import recoveryPasswordClientRoute from './src/routes/recoveryPasswordClientRoute.js';
+import recoveryPasswordAdminRoute from './src/routes/recoveryPasswordAdminRoute.js';
 import productRoute from './src/routes/productsRoute.js';
 import carShopRoute from './src/routes/carShopRoute.js';
 import authRoute from './src/routes/authRoute.js'
@@ -47,6 +48,7 @@ app.use("/apiActiveLife/employees",employeesRoute);
 app.use("/apiActiveLife/registerEmployee",registerEmployeesRoute);
 app.use("/apiActiveLife/logInClients", logInClientsRoute);
 app.use("/apiActiveLife/recoveryPasswordClient", recoveryPasswordClientRoute);
+app.use("/apiActiveLife/recoveryPasswordAdmin", recoveryPasswordAdminRoute);
 app.use("/apiActiveLife/products", productRoute);
 app.use("/apiActiveLife/carShop", carShopRoute);
 app.use("/apiActiveLife/sales", salesRoute);

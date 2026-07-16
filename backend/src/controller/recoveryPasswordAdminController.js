@@ -6,16 +6,16 @@ import recoveryPasswordEmail from "../utils/recoveryPasswordEmail.js"
 
 import { config } from "../../config.js";
 
-import clientsModel from "../models/clientsModel.js";
+import adminsModel from "../models/adminsModel.js";
 
-const recoveryPasswordController = {}
+const recoveryPasswordAdminController = {}
 
-recoveryPasswordController.requestCode = async (req, res) => {
+recoveryPasswordAdminController.requestCode = async (req, res) => {
     try {
         const { email } = req.body;
 
         //Validamos que el correo existe
-        const userFound = await clientsModel.findOne({email});
+        const userFound = await adminsModel.findOne({email});
         if(!userFound){
             return res.status(404).json({message: "user not found"})
         }
@@ -26,7 +26,7 @@ recoveryPasswordController.requestCode = async (req, res) => {
         //Guardamos en un token
         const token = jsonwebtoken.sign(
             //Que se guarda
-            {email, randomCode, userType: "client", verified: false},
+            {email, randomCode, userType: "admin", verified: false},
 
             //Llave secreta
             config.jwt.secret,
@@ -72,7 +72,7 @@ recoveryPasswordController.requestCode = async (req, res) => {
     }
 }
 
-recoveryPasswordController.verifyCode = async (req, res) => {
+recoveryPasswordAdminController.verifyCode = async (req, res) => {
     try {
         //1- solicitamos el codigo
         const { code } = req.body;
@@ -89,7 +89,7 @@ recoveryPasswordController.verifyCode = async (req, res) => {
         }
 
         const newToken = jsonwebtoken.sign(
-            {email: decoded.email, userType: "client", verified: true},
+            {email: decoded.email, userType: "admin", verified: true},
             config.jwt.secret,
             {expiresIn: "15m"}
         )
@@ -103,7 +103,7 @@ recoveryPasswordController.verifyCode = async (req, res) => {
     }
 }
 
-recoveryPasswordController.newPassword = async(req, res) => {
+recoveryPasswordAdminController.newPassword = async(req, res) => {
     try {
         //1. Solicito los datos
         const { newPassword, comfirmedPassword } = req.body;
@@ -124,7 +124,7 @@ recoveryPasswordController.newPassword = async(req, res) => {
         const passwordHash = await bcrypts.hash(newPassword, 10);
 
         //Encriptar la nueva contraseña
-        await clientsModel.findOneAndUpdate(
+        await adminsModel.findOneAndUpdate(
             {email: decoded.email},
             {password: passwordHash},
             {new: true}
@@ -139,4 +139,4 @@ recoveryPasswordController.newPassword = async(req, res) => {
     }
 }
 
-export default recoveryPasswordController;
+export default recoveryPasswordAdminController;

@@ -29,6 +29,7 @@ const Acceder = () => {
                     </button>
                     <Link to="/admin/inicioSesion" className="text-xs text-white">Inicio de Sesion Admin</Link>
                     <p className="text-sm pt-2 text-white">¿No tienes cuenta? <Link to="/register" className="text-xs text-blue-800 hover:underline">Registrate</Link></p>
+                    <Link to="/Recuperacion" className="text-xs text-white">Recuperar contraseña</Link>
                 </div>
             </form>
         </main>

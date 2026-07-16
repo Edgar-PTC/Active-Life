@@ -115,6 +115,107 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const LogInAdmin = async(event) => {
+        event.preventDefault();
+        try {
+            setLoading(true);
+            if(!email || !password){
+                Swal.fire({
+                    position: "top-end",
+                    title: 'Completa ambos campos para verificar tu identidad',
+                    icon: 'error',
+                    timer: 2500
+                });
+                return;
+            }
+
+            const response = await fetch("http://localhost:4000/apiActiveLife/loginAdmin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "email": email,
+                    "password": password
+                }),
+                credentials: "include",
+            });
+
+            if(!response.ok){
+                const json = await response.json();
+                if(json.message == "Email no encontrado"){
+                    Swal.fire({
+                        position: "top-end",
+                        title: 'No existe ningun usuario con este correo',
+                        icon: 'error',
+                        timer: 2500,
+                        showConfirmButton: false,
+                    });
+                }
+                if(json.message == "Cuenta bloqueada"){
+                    let time = parseFloat(json.time / 60 /1000);
+                    time = time.toFixed(0)
+                    Swal.fire({
+                        position: "top-end",
+                        title: `Cuenta bloqueada. Espera ${time} minutos`,
+                        icon: 'error',
+                        timer: json.time,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    });
+                }
+                if(json.message == "Contraseña incorrecta"){
+                    Swal.fire({
+                        position: "top-end",
+                        title: 'Contraseña incorrecta. Intentalo de nuevo',
+                        icon: 'error',
+                        timer: 2500,
+                        showConfirmButton: false,
+                    });
+                }
+                if(json.message == "Verifica tu correo primero"){
+                    Swal.fire({
+                        position: "top-end",
+                        title: 'Verifica tu correo antes de iniciar sesion',
+                        icon: 'error',
+                        timer: 2500,
+                        showConfirmButton: false,
+                    });
+                }
+                return;
+            }
+
+            const json = await response.json();
+            if (json.Id) {
+                localStorage.setItem("authId", json.Id);
+                setId(json.Id);
+            }
+            localStorage.setItem("authNombre", json.Nombre);
+            localStorage.setItem("authIsLoggedIn", true);
+
+            Swal.fire({
+                position: "top-end",
+                title: 'Inicio de sesion exitoso. ¡Bienvenido!',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                willClose: () => {
+                    navigate("/admin/dashboard");
+                }
+            });
+        } catch (error) {
+            console.log("Error: " + error);
+            Swal.fire({
+                position: "top-end",
+                title: 'Error interno del servidor',
+                icon: 'error',
+                timer: 2500
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const verify = async () => {
         try {
             setLoading(true);
@@ -217,6 +318,7 @@ export const AuthProvider = ({ children }) => {
             setPassword,
             loading,
             LogInCliente,
+            LogInAdmin,
             verify,
             logOut,
         }}>
