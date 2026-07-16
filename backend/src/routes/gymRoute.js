@@ -16,4 +16,7 @@ gymRoute.route("/:id")
 gymRoute.route("/paginate")
     .post(gymController.getPaginate);
 
+gymRoute.route("/searchByName")
+    .post(gymController.getByName);
+
 export default gymRoute;

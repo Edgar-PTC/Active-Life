@@ -28,7 +28,8 @@ const useProducts = () => {
                 title: 'Error interno del servidor',
                 icon: 'error',
                 timer: 2500
-            });   
+            })
+            ;   
         }
     }
 

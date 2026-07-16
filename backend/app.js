@@ -20,6 +20,7 @@ import loginAdminRoute from "./src/routes/loginAdminRoute.js";
 import salesRoute from "./src/routes/salesRoute.js";
 import gymRoute from "./src/routes/gymRoute.js";
 import gymComments from "./src/routes/gymCommentsRoute.js"
+import membershipRoute from './src/routes/membershipRoute.js';
 
 const app = express();
 
@@ -53,5 +54,6 @@ app.use("/apiActiveLife/sales", salesRoute);
 app.use("/apiActiveLife/gyms", gymRoute);
 app.use("/apiActiveLife/auth", authRoute);
 app.use("/apiActiveLife/gymComments", gymComments);
+app.use("/apiActiveLife/memberships", membershipRoute);
 
 export default app;

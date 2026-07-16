@@ -8,7 +8,7 @@ gymController.getPaginate = async (req, res) => {
         let {pagina, limite} = req.body;
 
         pagina = parseInt(pagina) || 1;
-        pagina = parseInt(limite) || 5; 
+        limite = parseInt(limite) || 6; 
 
         const skip = (pagina -1) * limite;
 
