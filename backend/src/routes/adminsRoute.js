@@ -9,6 +9,7 @@ adminsRoute
 
 adminsRoute
   .route("/:id")
+  .get(adminsController.getAdminById)
   .delete(adminsController.deleteAdmin)
   .put(adminsController.updateAdmin);
 

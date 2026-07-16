@@ -1,11 +1,11 @@
-import shoppingCartModel from "../models/shoppingCartModel.js";
+import carShopModel from "../models/carShopModel.js";
 import productsModel from "../models/productsModel.js";
 
 const shoppingCartController = {};
 
 shoppingCartController.getAllCarts = async (req, res) => {
     try {
-        const carts = await shoppingCartModel.find()
+        const carts = await carShopModel.find()
             .populate("clientId", "name email")
             .populate("products.productId", "name price");
 
@@ -18,8 +18,8 @@ shoppingCartController.getAllCarts = async (req, res) => {
 
 shoppingCartController.getCartById = async (req, res) => {
     try {
-        const cart = cartModel.findById(req.params.id)
-            .populate("clientId", "name email")
+        const cart = carShopModel.findById(req.params.id)
+            .populate("customerId", "name email")
             .populate("products.productId", "name price");
 
         return res.status(200).json(cart);
@@ -31,7 +31,7 @@ shoppingCartController.getCartById = async (req, res) => {
 
 shoppingCartController.insertCart = async (req, res) => {
     try {
-        const { clientId, products } = req.body;
+        const { customerId, products } = req.body;
 
         let total = 0;
 
@@ -130,7 +130,7 @@ shoppingCartController.updateCart = async (req, res) => {
             });
         }
         
-        const updatedCart = await shoppingCartModel.findByIdAndUpdate(
+        const updatedCart = await carShopModel.findByIdAndUpdate(
             req.params.id,
             {
                 clientId,
@@ -154,7 +154,7 @@ shoppingCartController.updateCart = async (req, res) => {
 
 shoppingCartController.deleteCart = async (req, res) => {
     try {
-        const deleteCart = await shoppingCartModel.findByIdAndDelete(req.params.id);
+        const deleteCart = await carShopModel.findByIdAndDelete(req.params.id);
 
         if (!deleteCart) {
             return res.status(404).json({ message: "Cart not found" });

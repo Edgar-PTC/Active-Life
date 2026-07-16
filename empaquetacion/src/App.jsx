@@ -34,6 +34,7 @@ import Pedidos from "./Pages/Admin/Pedidos";
 import PrimerUso from "./Pages/Admin/PrimerUso";
 import VerificarCorreoAdmin from "./Pages/Admin/VerificarCorreo";
 import DashboardAdmin from "./Pages/Admin/Dashboard";
+import PerfilAdmin from "./Pages/Admin/Perfil";
 
 //Rutas protegidas
 import { AuthProvider } from "./Context/clientContext.jsx";
@@ -121,6 +122,7 @@ function App() {
               <Route path="/admin/pedidos" element={<Pedidos />} />
               <Route path="/admin/verificaciones" element={<VerificarCorreoAdmin />} />
               <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+              <Route path="/admin/perfil" element={<PerfilAdmin />} />
             </Route>
           </Route>
         </Route>

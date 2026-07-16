@@ -1,55 +1,28 @@
+/*
+  name,
+  price,
+  discount,
+  stock,
+  category,
+  image,
+  description,
+  supplierId
+*/
+
 import { Schema, model } from "mongoose";
 
-const employeeSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
+const employeeSchema = new Schema({
+  name: { type: String },
+  email: { type: String },
+  password: { type: String },
+  phone: { type: String },
+  position: { type: String },
+  status: { type: Boolean },
+  loginAttempts: { type: Number },
+  timeOut: { type: Date }
+}, {
+  timestamps: true,
+    strict: false
+});
 
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    phone: {
-      type: String,
-    },
-
-    position: {
-      type: String,
-      default: "employee",
-    },
-
-    status: {
-      type: Boolean,
-      default: true,
-    },
-
-    loginAttempts: {
-      type: Number,
-      default: 0,
-    },
-
-    timeOut: {
-      type: Date,
-      default: null,
-    },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
-);
-
-export default model(
-  "Employees",
-  employeeSchema,
-  "employees"
-);
+export default model("Employees", employeeSchema, "Employees");

@@ -1,6 +1,7 @@
 const productsController = {};
 
 import productsModel from "../models/productsModel.js";
+import { v2 as cloudinary } from "cloudinary";
 
 productsController.getAll = async (req, res) => {
     try {
@@ -41,7 +42,7 @@ productsController.getByName = async (req, res) => {
 
 productsController.insert = async (req, res) => {
     try {
-        let { name, priceRequest, category, description } = req.body;
+        let { name, priceRequest, stockRequest, category, description } = req.body;
 
         name = name?.trim();
         category = category?.trim();
@@ -62,8 +63,13 @@ productsController.insert = async (req, res) => {
             return res.status(400).json({message: "price is 0 or less"});
         }
 
+        const stock = stockRequest === undefined || stockRequest === "" ? 0 : Number(stockRequest);
+        if (!Number.isFinite(stock) || stock < 0) {
+            return res.status(400).json({ message: "stock less than 0" });
+        }
+
         const newProduct = new productsModel({
-            name, price, stock: 0, category, image: req.file.path, image_id: req.file.filename, description
+            name, price, stock, category, image: req.file?.path, image_id: req.file?.filename, description
         });
 
         await newProduct.save();

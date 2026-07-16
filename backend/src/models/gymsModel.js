@@ -1,13 +1,12 @@
 /*
-    clientId,
-    products: {
-        productId,
-        amount,
-        unitPrice,
-        discount, 
-        subtotal
-    },
-    total
+    name,
+    description,
+    address,
+    city,
+    images: {
+        url,
+        image_id
+    }
 */
 
 import mongoose, { Schema, model } from "mongoose";

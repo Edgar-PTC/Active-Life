@@ -1,60 +1,34 @@
+/*
+  name,
+  email,
+  password,
+  emailVerification,
+  status,
+  loginAttempts,
+  TimeOut
+*/
+
 import { Schema, model } from "mongoose";
 
-const adminSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
+const adminSchema = new Schema({
+  name: { type: String },
+  email: { type: String },
+  password: { type: String },
 
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+  // Verificación de correo
+  emailVerification: { type: Boolean },
 
-    password: {
-      type: String,
-      required: true,
-    },
+  // Estado activo/inactivo
+  status: { type: Boolean },
 
-    role: {
-      type: String,
-      default: "admin",
-    },
+  // Intentos fallidos
+  loginAttempts: { type: Number },
 
-    // Verificación de correo
-    emailVerification: {
-      type: Boolean,
-      default: false,
-    },
+  // Tiempo de bloqueo
+  timeOut: { type: Date }
+}, {
+  timestamps: true,
+  strict: false
+});
 
-    // Estado activo/inactivo
-    status: {
-      type: Boolean,
-      default: true,
-    },
-
-    // Intentos fallidos
-    loginAttempts: {
-      type: Number,
-      default: 0,
-    },
-
-    // Tiempo de bloqueo
-    timeOut: {
-      type: Date,
-      default: null,
-    },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
-);
-
-export default model(
-  "Admins",
-  adminSchema,
-  "admins"
-);
+export default model("Admins", adminSchema, "Admins");
