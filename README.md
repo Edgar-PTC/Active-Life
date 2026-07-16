@@ -13,28 +13,6 @@ El repositorio está dividido en dos proyectos independientes que se ejecutan po
 | [`empaquetacion/`](empaquetacion) | Frontend en React (Vite) |
 | [`backend/`](backend) | API REST en Node.js/Express |
 
-## Arquitectura
-
-```mermaid
-flowchart LR
-    subgraph Cliente["Navegador"]
-        FE["Frontend React\n(Vite · puerto 5173)"]
-    end
-
-    subgraph Servidor["Servidor"]
-        BE["API Express\n(puerto 4000)"]
-    end
-
-    DB[("MongoDB Atlas")]
-    CLD["Cloudinary\n(imágenes)"]
-    MAIL["Nodemailer\n(correo)"]
-
-    FE -- "fetch /apiActiveLife/*\n(cookies + JWT)" --> BE
-    BE -- "Mongoose" --> DB
-    BE -- "Subida de imágenes" --> CLD
-    BE -- "Verificación / recuperación" --> MAIL
-```
-
 ## Tecnologías utilizadas
 
 ### Frontend (`empaquetacion/`)
