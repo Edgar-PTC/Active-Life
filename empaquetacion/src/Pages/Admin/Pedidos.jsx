@@ -2,21 +2,163 @@ import { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 const API = "http://localhost:4000/apiActiveLife/sales";
-const stateStyle = (status) => status === "Completado" ? "bg-green-100 text-green-700" : status === "Cancelado" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700";
+
+const stateStyle = (status) => {
+  if (status === "Completado") return "bg-green-100 text-green-700";
+  if (status === "Cancelado") return "bg-red-100 text-red-700";
+  return "bg-yellow-100 text-yellow-700";
+};
+
 const normalize = (sale) => {
   const cart = sale.shoppingCartId || {};
   const products = cart.products || [];
-  return { ...sale, id: sale._id, cliente: cart.clientId?.name || "Cliente no disponible", productos: products, producto: products.map((item) => item.productId?.name || "Producto").join(", ") || "Sin productos", total: cart.total ?? products.reduce((sum, item) => sum + (item.subtotal || 0), 0), fecha: sale.createdAt };
+  return {
+    ...sale,
+    id: sale._id,
+    cliente: cart.clientId?.name || "Cliente no disponible",
+    productos: products,
+    producto: products.map((item) => item.productId?.name || "Producto").join(", ") || "Sin productos",
+    total: cart.total ?? products.reduce((sum, item) => sum + (item.subtotal || 0), 0),
+    fecha: sale.createdAt,
+  };
 };
+
+const errorToast = (title) => Swal.fire({ position: "top-end", title, icon: "error", timer: 2500, showConfirmButton: false });
+
+function PedidoDetalleModal({ detail, onClose }) {
+  if (!detail) return null;
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(event) => event.stopPropagation()}>
+        <div className="p-6 rounded-xl" style={{ background: "var(--green_CFD9C7)" }}>
+          <h3 className="text-xl mb-4">Detalle del pedido</h3>
+          <p className="mb-2"><strong>Cliente:</strong> {detail.cliente}</p>
+          <p className="mb-2"><strong>Fecha:</strong> {detail.fecha ? new Date(detail.fecha).toLocaleString() : "-"}</p>
+          <div className="bg-white rounded-xl p-4">
+            {detail.productos.map((item, index) => (
+              <p key={item._id || index}>
+                {item.productId?.name || "Producto"} x {item.amount || 1} — ${Number(item.subtotal || 0).toFixed(2)}
+              </p>
+            ))}
+          </div>
+          <p className="mt-4"><strong>Total:</strong> ${Number(detail.total || 0).toFixed(2)}</p>
+          <button onClick={onClose} className="mt-4 py-2 px-5 rounded-xl text-white" style={{ background: "var(--green_455942)" }}>
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PedidoRow({ pedido, onChangeStatus, onViewDetail }) {
+  return (
+    <tr className="border-t hover:bg-gray-50 transition">
+      <td className="p-4 font-semibold">#{pedido.id.slice(-4)}</td>
+      <td className="p-4">{pedido.cliente}</td>
+      <td className="p-4">{pedido.producto}</td>
+      <td className="p-4">
+        <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">${Number(pedido.total || 0).toFixed(2)}</span>
+      </td>
+      <td className="p-4">
+        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${stateStyle(pedido.status)}`}>
+          {pedido.status || "Pendiente"}
+        </span>
+      </td>
+      <td className="p-4">{pedido.fecha ? new Date(pedido.fecha).toLocaleDateString() : "-"}</td>
+      <td className="p-4 flex gap-2 items-center">
+        {pedido.status === "Pendiente" && (
+          <>
+            <button onClick={() => onChangeStatus(pedido.id, "Completado")} className="bg-green-500 text-white px-3 py-1 rounded-md">
+              Aprobar
+            </button>
+            <button onClick={() => onChangeStatus(pedido.id, "Cancelado")} className="bg-red-500 text-white px-3 py-1 rounded-md">
+              Rechazar
+            </button>
+          </>
+        )}
+        <button onClick={() => onViewDetail(pedido)} className="bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition" aria-label="Ver detalle">
+          Ver
+        </button>
+      </td>
+    </tr>
+  );
+}
 
 function Pedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [search, setSearch] = useState("");
   const [detail, setDetail] = useState(null);
-  const load = async () => { try { const response = await fetch(API, { credentials: "include" }); if (!response.ok) throw new Error(); setPedidos((await response.json()).map(normalize)); } catch { Swal.fire({ position: "top-end", title: "No se pudieron cargar los pedidos", icon: "error", timer: 2500, showConfirmButton: false }); } };
-  useEffect(() => { load(); }, []);
-  const changeStatus = async (id, status) => { try { const response = await fetch(`${API}/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ status }) }); if (!response.ok) throw new Error(); await load(); } catch { Swal.fire({ position: "top-end", title: "No se pudo actualizar el estado", icon: "error", timer: 2500, showConfirmButton: false }); } };
-  const visible = useMemo(() => pedidos.filter((pedido) => `${pedido.id} ${pedido.cliente} ${pedido.producto}`.toLowerCase().includes(search.toLowerCase())), [pedidos, search]);
-  return <div className="p-6 min-h-screen" style={{ background: "var(--green_CFD9C7)" }}><div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold flex items-center gap-2">Gestión de pedidos</h2><input value={search} onChange={(event) => setSearch(event.target.value)} className="bg-white py-2 px-4 rounded-xl" placeholder="Buscar pedido" /></div><div className="bg-white rounded-xl shadow-md overflow-hidden"><table className="w-full"><thead><tr style={{ background: "var(--green_7F9E7A)" }}>{["ID", "Nombre del cliente", "Producto", "Total", "Estado", "Fecha", "Acciones"].map((title) => <th key={title} className="p-4 text-left text-white">{title}</th>)}</tr></thead><tbody>{visible.map((pedido) => <tr key={pedido.id} className="border-t hover:bg-gray-50 transition"><td className="p-4 font-semibold">#{pedido.id.slice(-4)}</td><td className="p-4">{pedido.cliente}</td><td className="p-4">{pedido.producto}</td><td className="p-4"><span className="bg-gray-100 px-3 py-1 rounded-full text-sm">${Number(pedido.total || 0).toFixed(2)}</span></td><td className="p-4"><span className={`px-3 py-1 rounded-full text-sm font-semibold ${stateStyle(pedido.status)}`}>{pedido.status || "Pendiente"}</span></td><td className="p-4">{pedido.fecha ? new Date(pedido.fecha).toLocaleDateString() : "-"}</td><td className="p-4 flex gap-2 items-center">{pedido.status === "Pendiente" && <><button onClick={() => changeStatus(pedido.id, "Completado")} className="bg-green-500 text-white px-3 py-1 rounded-md">Aprobar</button><button onClick={() => changeStatus(pedido.id, "Cancelado")} className="bg-red-500 text-white px-3 py-1 rounded-md">Rechazar</button></>}<button onClick={() => setDetail(pedido)} className="bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition" aria-label="Ver detalle">Ver</button></td></tr>)}</tbody></table><div className="p-4 text-sm text-gray-500">Mostrando {visible.length} de {pedidos.length} pedidos</div></div>{detail && <div className="modal-overlay" onClick={() => setDetail(null)}><div className="modal-content" onClick={(event) => event.stopPropagation()}><div className="p-6 rounded-xl" style={{ background: "var(--green_CFD9C7)" }}><h3 className="text-xl mb-4">Detalle del pedido</h3><p className="mb-2"><strong>Cliente:</strong> {detail.cliente}</p><p className="mb-2"><strong>Fecha:</strong> {detail.fecha ? new Date(detail.fecha).toLocaleString() : "-"}</p><div className="bg-white rounded-xl p-4">{detail.productos.map((item, index) => <p key={item._id || index}>{item.productId?.name || "Producto"} x {item.amount || 1} — ${Number(item.subtotal || 0).toFixed(2)}</p>)}</div><p className="mt-4"><strong>Total:</strong> ${Number(detail.total || 0).toFixed(2)}</p><button onClick={() => setDetail(null)} className="mt-4 py-2 px-5 rounded-xl text-white" style={{ background: "var(--green_455942)" }}>Cerrar</button></div></div></div>}</div>;
+
+  const load = async () => {
+    try {
+      const response = await fetch(API, { credentials: "include" });
+      if (!response.ok) throw new Error();
+      setPedidos((await response.json()).map(normalize));
+    } catch {
+      errorToast("No se pudieron cargar los pedidos");
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const changeStatus = async (id, status) => {
+    try {
+      const response = await fetch(`${API}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
+      if (!response.ok) throw new Error();
+      await load();
+    } catch {
+      errorToast("No se pudo actualizar el estado");
+    }
+  };
+
+  const visible = useMemo(
+    () => pedidos.filter((pedido) => `${pedido.id} ${pedido.cliente} ${pedido.producto}`.toLowerCase().includes(search.toLowerCase())),
+    [pedidos, search]
+  );
+
+  return (
+    <div className="p-6 min-h-screen" style={{ background: "var(--green_CFD9C7)" }}>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold flex items-center gap-2">Gestión de pedidos</h2>
+        <input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="bg-white py-2 px-4 rounded-xl"
+          placeholder="Buscar pedido"
+        />
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr style={{ background: "var(--green_7F9E7A)" }}>
+              {["ID", "Nombre del cliente", "Producto", "Total", "Estado", "Fecha", "Acciones"].map((title) => (
+                <th key={title} className="p-4 text-left text-white">{title}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {visible.map((pedido) => (
+              <PedidoRow key={pedido.id} pedido={pedido} onChangeStatus={changeStatus} onViewDetail={setDetail} />
+            ))}
+          </tbody>
+        </table>
+        <div className="p-4 text-sm text-gray-500">
+          Mostrando {visible.length} de {pedidos.length} pedidos
+        </div>
+      </div>
+
+      <PedidoDetalleModal detail={detail} onClose={() => setDetail(null)} />
+    </div>
+  );
 }
+
 export default Pedidos;

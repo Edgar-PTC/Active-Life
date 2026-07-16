@@ -1,12 +1,101 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 const BASE = "http://localhost:4000/apiActiveLife";
+
+function StatCard({ label, value }) {
+  return (
+    <section className="rounded-2xl bg-[#84A37E] p-6 text-white shadow-lg">
+      <p className="text-sm opacity-80">{label}</p>
+      <h2 className="text-4xl font-bold mt-1">{value}</h2>
+    </section>
+  );
+}
+
+function PedidoPendienteItem({ sale }) {
+  return (
+    <div className="flex justify-between py-3 border-t">
+      <p>{sale.shoppingCartId?.clientId?.name || "Cliente"}</p>
+      <p className="text-[#84A37E]">${Number(sale.shoppingCartId?.total || 0).toFixed(2)}</p>
+    </div>
+  );
+}
+
+function ProductoItem({ product }) {
+  return (
+    <div className="flex items-center gap-5 py-3">
+      <img src={product.image} alt={product.name} className="w-12 h-12 rounded-lg object-cover" />
+      <div>
+        <p className="text-black">{product.name}</p>
+        <p className="text-[#84A37E]">${Number(product.price || 0).toFixed(2)}</p>
+      </div>
+    </div>
+  );
+}
+
 const DashboardAdmin = () => {
   const [data, setData] = useState({ products: [], clients: [], sales: [] });
-  useEffect(() => { Promise.all([fetch(`${BASE}/products`), fetch(`${BASE}/clients`), fetch(`${BASE}/sales`)]).then(async ([products, clients, sales]) => setData({ products: products.ok ? await products.json() : [], clients: clients.ok ? await clients.json() : [], sales: sales.ok ? await sales.json() : [] })).catch(() => setData({ products: [], clients: [], sales: [] })); }, []);
+
+  useEffect(() => {
+    Promise.all([fetch(`${BASE}/products`), fetch(`${BASE}/clients`), fetch(`${BASE}/sales`)])
+      .then(async ([products, clients, sales]) =>
+        setData({
+          products: products.ok ? await products.json() : [],
+          clients: clients.ok ? await clients.json() : [],
+          sales: sales.ok ? await sales.json() : [],
+        })
+      )
+      .catch(() => setData({ products: [], clients: [], sales: [] }));
+  }, []);
+
   const totalSales = data.sales.reduce((sum, sale) => sum + Number(sale.shoppingCartId?.total || 0), 0);
   const pending = data.sales.filter((sale) => sale.status === "Pendiente").slice(0, 5);
-  const stats = [["Productos", data.products.length], ["Clientes", data.clients.length], ["Pedidos", data.sales.length], ["Ingresos / Ventas", `$${totalSales.toFixed(2)}`]];
-  return <main className="flex flex-col p-8 h-full min-h-screen gap-5" style={{ background: "var(--green_CFD9C7)" }}><div className="flex flex-row justify-between p-6 rounded-xl w-full" style={{ backgroundColor: "#BAC9BC" }}><div><p className="text-m" style={{ color: "var(--gray)" }}>¡Bienvenido de vuelta!</p><h2 className="text-4xl" style={{ color: "var(--green_455942)" }}>Administrador</h2></div><Link className="flex items-center justify-center rounded-xl text-white pl-6 pr-6 text-sm" style={{ backgroundColor: "var(--green_7F9E7A)" }} to="/admin/perfil">Mi perfil</Link></div><div className="grid grid-cols-4 gap-5">{stats.map(([label, value]) => <section key={label} className="rounded-2xl bg-[#84A37E] p-6 text-white shadow-lg"><p className="text-sm opacity-80">{label}</p><h2 className="text-4xl font-bold mt-1">{value}</h2></section>)}</div><div className="grid grid-cols-2 gap-10"><section className="rounded-2xl bg-[#F2EDE4] p-6 shadow-lg"><p className="text-black mb-4">Pedidos sin recoger</p>{pending.map((sale) => <div key={sale._id} className="flex justify-between py-3 border-t"><p>{sale.shoppingCartId?.clientId?.name || "Cliente"}</p><p className="text-[#84A37E]">${Number(sale.shoppingCartId?.total || 0).toFixed(2)}</p></div>)}</section><section className="rounded-2xl bg-[#F2EDE4] p-6 shadow-lg"><p className="text-black mb-4">Productos</p>{data.products.slice(0, 3).map((product) => <div key={product._id} className="flex items-center gap-5 py-3"><img src={product.image} alt={product.name} className="w-12 h-12 rounded-lg object-cover" /><div><p className="text-black">{product.name}</p><p className="text-[#84A37E]">${Number(product.price || 0).toFixed(2)}</p></div></div>)}</section></div></main>;
+  const stats = [
+    ["Productos", data.products.length],
+    ["Clientes", data.clients.length],
+    ["Pedidos", data.sales.length],
+    ["Ingresos / Ventas", `$${totalSales.toFixed(2)}`],
+  ];
+
+  return (
+    <main className="flex flex-col p-8 h-full min-h-screen gap-5" style={{ background: "var(--green_CFD9C7)" }}>
+      <div className="flex flex-row justify-between p-6 rounded-xl w-full" style={{ backgroundColor: "#BAC9BC" }}>
+        <div>
+          <p className="text-m" style={{ color: "var(--gray)" }}>¡Bienvenido de vuelta!</p>
+          <h2 className="text-4xl" style={{ color: "var(--green_455942)" }}>Administrador</h2>
+        </div>
+        <Link
+          className="flex items-center justify-center rounded-xl text-white pl-6 pr-6 text-sm"
+          style={{ backgroundColor: "var(--green_7F9E7A)" }}
+          to="/admin/perfil"
+        >
+          Mi perfil
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-4 gap-5">
+        {stats.map(([label, value]) => (
+          <StatCard key={label} label={label} value={value} />
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-10">
+        <section className="rounded-2xl bg-[#F2EDE4] p-6 shadow-lg">
+          <p className="text-black mb-4">Pedidos sin recoger</p>
+          {pending.map((sale) => (
+            <PedidoPendienteItem key={sale._id} sale={sale} />
+          ))}
+        </section>
+
+        <section className="rounded-2xl bg-[#F2EDE4] p-6 shadow-lg">
+          <p className="text-black mb-4">Productos</p>
+          {data.products.slice(0, 3).map((product) => (
+            <ProductoItem key={product._id} product={product} />
+          ))}
+        </section>
+      </div>
+    </main>
+  );
 };
+
 export default DashboardAdmin;
