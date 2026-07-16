@@ -59,8 +59,12 @@ logInClientsController.login = async(req, res) => {
 
         //Guardamos el token en una cookie
         res.cookie("authCookieClient", token);
-        
-        return res.status(200).json({message: "Inicio de sesion exitoso"})
+
+        return res.status(200).json({
+            message: "Inicio de sesion exitoso",
+            Id: userFound._id,
+            Nombre: userFound.name
+        })
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});

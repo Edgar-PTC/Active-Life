@@ -4,12 +4,16 @@ import Swal from 'sweetalert2'
 
 const AuthContext = createContext();
 
+// Evita hidratar el contexto con valores corruptos (ej. el string literal "undefined")
+const esIdValido = (id) => typeof id === "string" && /^[0-9a-fA-F]{24}$/.test(id);
+
 export const AuthProvider = ({ children }) => {
     const [ Nombre, setNombre ] = useState(() => {
         return localStorage.getItem("authNombre") || ""
     });
     const [ Id, setId ] = useState(() => {
-        return localStorage.getItem("authId") || ""
+        const idGuardado = localStorage.getItem("authId");
+        return esIdValido(idGuardado) ? idGuardado : ""
     });
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -81,7 +85,10 @@ export const AuthProvider = ({ children }) => {
             }
 
             const json = await response.json();
-            localStorage.setItem("authId", json.Id);
+            if (json.Id) {
+                localStorage.setItem("authId", json.Id);
+                setId(json.Id);
+            }
             localStorage.setItem("authNombre", json.Nombre);
             localStorage.setItem("authIsLoggedIn", true);
 
@@ -140,15 +147,26 @@ export const AuthProvider = ({ children }) => {
                 }
 
                 const json = await response.json();
-                localStorage.setItem("authId", json.Id);
+                if (json.Id) {
+                    localStorage.setItem("authId", json.Id);
+                    setId(json.Id);
+                }
                 localStorage.setItem("authNombre", json.Nombre);
                 localStorage.setItem("authIsLoggedIn", true);
+                setNombre(json.Nombre);
+                setIsLoggedIn(true);
+                return;
             }
 
             const json = await res.json();
-            localStorage.setItem("authId", json.Id);
+            if (json.Id) {
+                localStorage.setItem("authId", json.Id);
+                setId(json.Id);
+            }
             localStorage.setItem("authNombre", json.Nombre);
             localStorage.setItem("authIsLoggedIn", true);
+            setNombre(json.Nombre);
+            setIsLoggedIn(true);
         } catch (error) {
             console.log("Error: " + error);
             Swal.fire({

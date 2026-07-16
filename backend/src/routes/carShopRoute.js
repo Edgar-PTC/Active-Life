@@ -13,5 +13,7 @@ router.route("/:id")
 .delete(carShopController.deleteCart)
 
 router.route("/searchByClient").post(carShopController.getByCliente)
+router.route("/calculate").post(carShopController.calculateCart)
+router.route("/sync").post(carShopController.syncCart)
 
 export default router;

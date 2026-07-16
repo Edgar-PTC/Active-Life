@@ -73,6 +73,37 @@ shoppingCartController.insertCart = async (req, res) => {
     }
 }
 
+shoppingCartController.calculateCart = async (req, res) => {
+    try {
+        const { products } = req.body;
+
+        let total = 0;
+        let newProducts = [];
+
+        for (let i = 0; i < products.length; i++) {
+            const productFound = await productsModel.findById(products[i].productId);
+
+            if (!productFound) {
+                return res.status(404).json({ message: `Product ${products[i].productId} not found` });
+            }
+
+            const subtotal = productFound.price * products[i].amount;
+            total += subtotal;
+
+            newProducts.push({
+                productId: products[i].productId,
+                amount: products[i].amount,
+                subtotal
+            });
+        }
+
+        return res.status(200).json({ products: newProducts, total });
+    } catch (error) {
+        console.log("error " + error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 shoppingCartController.updateCart = async (req, res) => {
     try {
         const { clientId, products} = req.body;
