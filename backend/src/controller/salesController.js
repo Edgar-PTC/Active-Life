@@ -1,5 +1,5 @@
 import salesModel from "../models/salesModel.js";
-import CarModel from "../models/carShopModel.js";
+import CarModel from "../models/shoppingCartModel.js";
 import mongoose from 'mongoose';
 
 const salesController = {};
@@ -87,7 +87,7 @@ salesController.buscarPorCliente = async (req, res) => {
             clientId: clientId 
         }).populate({
             path: 'products.productId',
-            model: 'productsModel'
+            model: 'products'
         });
 
         console.log("Carritos encontrados:", shoppingCarts.length);
@@ -105,7 +105,7 @@ salesController.buscarPorCliente = async (req, res) => {
         const shoppingCartIds = shoppingCarts.map(cart => cart._id);
 
         // Buscar todas las ventas que correspondan a esos carritos
-        const sales = await saleModel.find({
+        const sales = await salesModel.find({
             shoppingCartId: { $in: shoppingCartIds }
         }).populate('shoppingCartId');
 

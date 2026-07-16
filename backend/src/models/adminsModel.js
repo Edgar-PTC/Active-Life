@@ -31,4 +31,4 @@ const adminSchema = new Schema({
   strict: false
 });
 
-export default model("Admins", adminSchema, "Admins");
+export default model("Admins", adminSchema, "admins");

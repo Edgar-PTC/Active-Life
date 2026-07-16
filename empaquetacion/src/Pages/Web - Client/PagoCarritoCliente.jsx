@@ -28,7 +28,7 @@ const PagoCarritoCliente = () => {
             const res = await fetch("http://localhost:4000/apiActiveLife/carShop/searchByClient", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ customerId: Id }),
+                body: JSON.stringify({ clientId: Id }),
                 credentials: "include",
             });
 

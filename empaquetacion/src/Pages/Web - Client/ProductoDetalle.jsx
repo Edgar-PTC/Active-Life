@@ -10,6 +10,10 @@ const ProductoDetalle = () => {
   const [ cantidad, setCantidad ] = useState(0);
   const { guardarLocalCarrito } = useCarShop();
 
+  useEffect(() => {
+    getProductDetail(id);
+  }, [])
+
   return (
     <div className="min-h-screen bg-[#CFD9C7] px-8 py-6">
       <div className="bg-[#8FB080] rounded-2xl p-6 max-w-4xl mx-auto">
@@ -46,6 +50,7 @@ const ProductoDetalle = () => {
           </button>
         </div>
       </div>
+      
     </div>
   );
 };

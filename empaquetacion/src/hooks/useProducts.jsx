@@ -82,7 +82,9 @@ const useProducts = () => {
                 return;
             }
             
+            console.log(res)
             const json = await res.json();
+            console.log(json)
             setProductoDetail(json);
         } catch (error_) {
             console.log("Error: " + error_);

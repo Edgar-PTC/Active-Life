@@ -1,21 +1,35 @@
-import CarModel from '../models/carShopModel.js';
+import CarModel from '../models/shoppingCartModel.js';
 import productsModel from "../models/productsModel.js";
 
 const carShopController = {};
 
+// Convierte un documento de carrito (schema: clientId, products[].amount/unitPrice) al shape
+// que espera el frontend (customerId-less, products[].quantity)
+const formatearCarrito = (cart) => ({
+    _id: cart._id,
+    clientId: cart.clientId,
+    status: cart.status,
+    total: cart.total,
+    products: cart.products.map(p => ({
+        productId: p.productId,
+        quantity: p.amount,
+        subtotal: p.subtotal
+    }))
+});
+
 carShopController.getAllCarts = async (req, res) => {
     try {
-        const get = await CarModel.find().populate("products.productId", "name price").populate("customerId", "name email");
+        const get = await CarModel.find().populate("products.productId", "name price").populate("clientId", "name email");
         res.status(200).json(get);
     } catch (error) {
         console.log("Error: " + error);
-        return res.status(500).json({message: "Internal server error"});       
+        return res.status(500).json({message: "Internal server error"});
     }
 }
 
 carShopController.getById = async (req, res) => {
     try {
-        const cart = await CarModel.findById(req.params.id).populate("products.productId", "name price").populate("customerId", "name email");
+        const cart = await CarModel.findById(req.params.id).populate("products.productId", "name price").populate("clientId", "name email");
         if(!cart){
             return res.status(404).json({message: "Cart not found"});
         }
@@ -28,17 +42,17 @@ carShopController.getById = async (req, res) => {
 
 carShopController.getByCliente = async (req, res) => {
     try {
-        const { customerId } = req.body;
+        const { clientId } = req.body;
 
         const cart = await CarModel.findOne({
-            customerId: customerId, status: "active"
+            clientId: clientId, status: "active"
         }).populate("products.productId", "name price image");
 
         if(!cart){
             return res.status(404).json({message: "Client without cart active"});
         }
 
-        res.status(200).json(cart);
+        res.status(200).json(formatearCarrito(cart));
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
@@ -53,7 +67,7 @@ carShopController.insertCart = async (req, res) => {
             return res.status(400).json({message: "You already have an active cart"});
         }
 
-        const {customerId, products} = req.body;
+        const {clientId, products} = req.body;
 
         ////////////////////////////// CALCULAR EL SUBTOTAL Y TOTAL //////////////////////////////
         let total = 0;
@@ -80,14 +94,15 @@ carShopController.insertCart = async (req, res) => {
 
             newProducts.push({
                 productId: products[s].productId,
-                quantity: products[s].quantity,
+                amount: products[s].quantity,
+                unitPrice: product.price,
                 subtotal
             });
 
-            
+
         }
         const newCart = new CarModel({
-            customerId,
+            clientId,
             products: newProducts,
             total,
             status: "active"
@@ -138,10 +153,10 @@ carShopController.calculateCart = async (req, res) => {
 
 carShopController.syncCart = async (req, res) => {
     try {
-        const { customerId, products } = req.body;
+        const { clientId, products } = req.body;
 
-        if (!customerId) {
-            return res.status(400).json({ message: "customerId is required" });
+        if (!clientId) {
+            return res.status(400).json({ message: "clientId is required" });
         }
 
         let total = 0;
@@ -159,18 +174,19 @@ carShopController.syncCart = async (req, res) => {
 
             newProducts.push({
                 productId: products[s].productId,
-                quantity: products[s].quantity,
+                amount: products[s].quantity,
+                unitPrice: product.price,
                 subtotal
             });
         }
 
         const cart = await CarModel.findOneAndUpdate(
-            { customerId, status: "active" },
-            { customerId, products: newProducts, total, status: "active" },
+            { clientId, status: "active" },
+            { clientId, products: newProducts, total, status: "active" },
             { new: true, upsert: true }
         );
 
-        return res.status(200).json(cart);
+        return res.status(200).json(formatearCarrito(cart));
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({ message: "Internal server error" });
@@ -179,7 +195,7 @@ carShopController.syncCart = async (req, res) => {
 
 carShopController.updateCart = async (req, res) => {
     try {
-        const {customerId, products, status} = req.body;
+        const {clientId, products, status} = req.body;
 
         let total = 0;
         let newProducts = [];
@@ -204,13 +220,14 @@ carShopController.updateCart = async (req, res) => {
 
             newProducts.push({
                 productId: products[s].productId,
-                quantity: products[s].quantity,
+                amount: products[s].quantity,
+                unitPrice: product.price,
                 subtotal
             });
         }
 
         const updateCart = await CarModel.findByIdAndUpdate(req.params.id, {
-            customerId,
+            clientId,
             products: newProducts,
             total,
             status

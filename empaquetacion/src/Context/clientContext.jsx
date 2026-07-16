@@ -126,14 +126,18 @@ export const AuthProvider = ({ children }) => {
                 credentials: "include",
             })
 
+            console.log(res);
+
             if(!res.ok){
-                const response = await fetch("http://localhost:4000/apiActiveLife/auth/client", {
+                const response = await fetch("http://localhost:4000/apiActiveLife/auth/admin", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: "include",
                 });
+
+                console.log(response)
 
                 if(!response.ok){
                     Swal.fire({

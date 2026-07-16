@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Swal from 'sweetalert2';
 
-// Evita mandar valores corruptos (ej. el string literal "undefined") como customerId al backend
+// Evita mandar valores corruptos (ej. el string literal "undefined") como clientId al backend
 const esIdValido = (id) => typeof id === "string" && /^[0-9a-fA-F]{24}$/.test(id);
 
 const useCarShop = () => {
@@ -154,7 +154,7 @@ const useCarShop = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ customerId: idClient }),
+                body: JSON.stringify({ clientId: idClient }),
                 credentials: "include",
             });
 
@@ -219,7 +219,7 @@ const useCarShop = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    customerId: idClient,
+                    clientId: idClient,
                     products: carrito.productos.map(p => ({
                         productId: p.productId,
                         quantity: p.quantity
@@ -256,7 +256,7 @@ const useCarShop = () => {
             }
 
             const payload = JSON.stringify({
-                customerId: idClient,
+                clientId: idClient,
                 products: productos.map(p => ({
                     productId: p.productId,
                     quantity: p.quantity

@@ -31,7 +31,8 @@ const shoppingCartSchema = new Schema({
             subtotal: { type: Number }
         }
     ],
-    total: { type: Number }
+    total: { type: Number },
+    status: { type: String }
 }, {
     timestamps: true,
     strict: false
