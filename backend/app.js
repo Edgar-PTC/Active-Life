@@ -20,8 +20,9 @@ import registerAdminRoute from "./src/routes/registerAdminsRoute.js";
 import loginAdminRoute from "./src/routes/loginAdminRoute.js";
 import salesRoute from "./src/routes/salesRoute.js";
 import gymRoute from "./src/routes/gymRoute.js";
-import gymComments from "./src/routes/gymCommentsRoute.js"
+import gymComments from "./src/routes/gymCommentsRoute.js";
 import membershipRoute from './src/routes/membershipRoute.js';
+import wompiRoutes from "./src/routes/wompi.js";
 
 const app = express();
 
@@ -57,5 +58,6 @@ app.use("/apiActiveLife/gyms", gymRoute);
 app.use("/apiActiveLife/auth", authRoute);
 app.use("/apiActiveLife/gymComments", gymComments);
 app.use("/apiActiveLife/memberships", membershipRoute);
+app.use("/apiActiveLife/wompi", wompiRoutes);
 
 export default app;
