@@ -26,10 +26,23 @@ const PagoCarritoCliente = () => {
 
     const cargarCarrito = async () => {
         try {
-            const res = await fetch("http://localhost:4000/apiActiveLife/carShop/searchByClient", {
+            // El carrito solo vive en localStorage hasta este punto (useCarShop lo sincroniza
+            // con el servidor recién al cerrar/ocultar la pestaña). Aquí lo sincronizamos de
+            // forma explícita para asegurar que el servidor tenga un carrito activo del cual
+            // obtener el cartId necesario para registrar la venta.
+            const carritoGuardado = localStorage.getItem("authCarShop");
+            const carritoLocal = carritoGuardado ? JSON.parse(carritoGuardado) : { productos: [] };
+
+            const res = await fetch("http://localhost:4000/apiActiveLife/carShop/sync", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ clientId: Id }),
+                body: JSON.stringify({
+                    clientId: Id,
+                    products: carritoLocal.productos.map(p => ({
+                        productId: p.productId,
+                        quantity: p.quantity
+                    }))
+                }),
                 credentials: "include",
             });
 

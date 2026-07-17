@@ -184,7 +184,7 @@ carShopController.syncCart = async (req, res) => {
             { clientId, status: "active" },
             { clientId, products: newProducts, total, status: "active" },
             { new: true, upsert: true }
-        );
+        ).populate("products.productId", "name price image");
 
         return res.status(200).json(formatearCarrito(cart));
     } catch (error) {
