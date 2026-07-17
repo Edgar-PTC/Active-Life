@@ -1,25 +1,35 @@
 import gymModel from "../models/gymModel.js";
+import membershipModel from "../models/membershipModel.js";
 
 const gymController = {}
 
+const conConteoMembresias = async (gyms) => {
+    return Promise.all(gyms.map(async (gym) => {
+        const membershipsCount = await membershipModel.countDocuments({ gymId: gym._id });
+        return { ...gym.toObject(), membershipsCount };
+    }));
+}
+
 gymController.getPaginate = async (req, res) => {
     try{
-    
+
         let {pagina, limite} = req.body;
 
         pagina = parseInt(pagina) || 1;
-        limite = parseInt(limite) || 6; 
+        limite = parseInt(limite) || 6;
 
         const skip = (pagina -1) * limite;
 
-        const gyms = await gymModel.find().skip(skip).limit(limite); 
+        const gyms = await gymModel.find().skip(skip).limit(limite);
 
         const totalGyms = await gymModel.countDocuments();
 
+        const gymsConMembresias = await conConteoMembresias(gyms);
+
         return res.status(200).json({
-            data: gyms,
+            data: gymsConMembresias,
             pagina: pagina,
-            totalPages: Math.ceil(totalGyms / limite), 
+            totalPages: Math.ceil(totalGyms / limite),
             totalData: totalGyms,
             limitPage: limite
         });
@@ -37,7 +47,9 @@ gymController.getAll = async (req, res) => {
             return res.status(404).json({message: "No Hay gimnasios disponibles"})
         }
 
-        return res.status(200).json(gyms)
+        const gymsConMembresias = await conConteoMembresias(gyms);
+
+        return res.status(200).json(gymsConMembresias)
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
@@ -50,11 +62,13 @@ gymController.getByid = async (req, res) => {
         const gym = await gymModel.findById(req.params.id)
 
         if (!gym) {
-            return res.status(404).json({message: `No se encontro el gimnasio con id ${id}`})
+            return res.status(404).json({message: `No se encontro el gimnasio con id ${req.params.id}`})
         }
 
-        return res.status(200).json(gym)
-        
+        const membershipsCount = await membershipModel.countDocuments({ gymId: gym._id });
+
+        return res.status(200).json({ ...gym.toObject(), membershipsCount })
+
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
@@ -81,38 +95,23 @@ gymController.getByName = async (req, res) => {
 gymController.insertGym = async (req, res) => {
     try{
 
-        let {name, description, address, city, images} = req.body
-        
-        let imagesArray = [];
+        let {name, description, address, city, municipio} = req.body
 
-        
-
-        //Parsear imagenes si vienen como string
-        if (typeof images === 'string'){
-            try{
-                imagesArray = JSON.parse(images);
-            }catch{
-                return res.status(400).json({message: "Formato de imagenes no valido"})
-            }
-        } else if(Array.isArray(images)){
-            //Si las imagenes vienen como array, asignarlas directamente
-            imagesArray = images;
+        if (!name) {
+            return res.status(400).json({message: "El nombre del gimnasio es obligatorio"})
         }
 
-        imagesArray.push({
-            image: req.file.path,
-            public_id: req.file.filename
-        })
-        //Validar que todas las imagenes tengan el formato correcto
-        if (!Array.isArray(imagesArray)) {
-            return res.status(400).json({message: "Formato de imagenes no valido"})
-        }
+        const imagesArray = (req.files || []).map((file) => ({
+            image: file.path,
+            public_id: file.filename
+        }))
 
         const newGym = new gymModel({
             name,
             description,
             address,
             city,
+            municipio,
             images: imagesArray //Array de imagenes con formato {image, public_id}
         })
 
@@ -129,49 +128,26 @@ gymController.insertGym = async (req, res) => {
 
 gymController.updateGym = async (req, res) => {
     try {
-        const { name, description, address, city, images } = req.body;
+        const { name, description, address, city, municipio } = req.body;
 
-        const gymFound = await gymModel.findById(req.params.id).populate;
+        const gymFound = await gymModel.findById(req.params.id);
 
         if (!gymFound) {
             return res.status(404).json({ message: "Gimnasio no encontrado" });
         }
 
-        let imagesArray = []
-
-        //Parsear imagenes si vienen como string
-        if (typeof images === 'string'){
-            try{
-                imagesArray = JSON.parse(images);
-            }catch{
-                return res.status(400).json({message: "Formato de imagenes no valido"})
-            }
-        } else if(Array.isArray(images)){
-            //Si las imagenes vienen como array, asignarlas directamente
-            imagesArray = images;
-        }
-
-        imagesArray.push({
-            image: req.file.path,
-            public_id: req.file.filename
-        })
-
-        //Validar que todas las imagenes tengan el formato correcto
-        if (!Array.isArray(imagesArray)) {
-            return res.status(400).json({message: "Formato de imagenes no valido"})
-        }
+        const nuevasImagenes = (req.files || []).map((file) => ({
+            image: file.path,
+            public_id: file.filename
+        }))
 
         const gymModified = {
             name: name || gymFound.name,
             description: description || gymFound.description,
             address: address || gymFound.address,
             city: city || gymFound.city,
-        }
-
-        if (req.file) {
-            await cloudinary.uploader.destroy(gymFound.public_id)
-            gymModified.image = req.file.path
-            gymModified.public_id = req.file.filename;
+            municipio: municipio || gymFound.municipio,
+            images: [...gymFound.images, ...nuevasImagenes]
         }
 
         await gymModel.findByIdAndUpdate(req.params.id, gymModified, {new: true});

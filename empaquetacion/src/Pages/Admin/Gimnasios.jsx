@@ -4,7 +4,12 @@ import useGyms from "../../hooks/useGyms";
 
 const GimnasiosAdmin = () => {
 
-    const {loadingGyms, listaGyms, pagina, setPagina, totalPaginas, totalData, limitePagina, searchGymByName } = useGyms()
+    const {loadingGyms, listaGyms, pagina, setPagina, totalPaginas, totalData, limitePagina, getGymsPaginated, deleteGym, searchGymByName } = useGyms()
+
+    const eliminarGimnasio = async (id) => {
+        const eliminado = await deleteGym(id);
+        if (eliminado) getGymsPaginated(pagina);
+    }
 
     const irPaginaAnterior = () => {
         if (pagina > 1) setPagina(pagina - 1);
@@ -56,7 +61,7 @@ const GimnasiosAdmin = () => {
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {listaGyms.map((gym) => (
-                                <TableGymAd key={gym._id} gym={gym}/>
+                                <TableGymAd key={gym._id} gym={gym} onMembershipAdded={() => getGymsPaginated(pagina)} onDelete={eliminarGimnasio}/>
                             ))}
                             <tr className="flex flex-row w-full justify-between px-6 py-4 items-center">
                                 <p className="text-sm" style={{color: "var(--brown)"}}>

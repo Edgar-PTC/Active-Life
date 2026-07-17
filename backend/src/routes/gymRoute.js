@@ -6,11 +6,11 @@ const gymRoute = express.Router();
 
 gymRoute.route("/")
     .get(gymController.getAll)
-    .post(upload.single("image"), gymController.insertGym)
+    .post(upload.array("images"), gymController.insertGym)
 
 gymRoute.route("/:id")
     .get(gymController.getByid)
-    .put(upload.single("image"), gymController.updateGym)
+    .put(upload.array("images"), gymController.updateGym)
     .delete(gymController.deleteGym);
 
 gymRoute.route("/paginate")

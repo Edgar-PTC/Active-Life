@@ -4,6 +4,7 @@ import Swal from "sweetalert2"
 const useGyms = () => {
     const [listaGyms, setListaGyms] = useState([])
     const [gymDetail, setGymDetail] = useState([])
+    const [gymSeleccionado, setGymSeleccionado] = useState(null)
     
     const [loadingGyms, setLoadingGyms] = useState(false)
 
@@ -60,6 +61,188 @@ const useGyms = () => {
         } */
     }
 
+    const insertGym = async (gymData) => {
+        try {
+            setLoadingGyms(true)
+
+            const formData = new FormData();
+            formData.append("name", gymData.name);
+            formData.append("description", gymData.description);
+            formData.append("address", gymData.address);
+            formData.append("city", gymData.city);
+            formData.append("municipio", gymData.municipio);
+            gymData.images.forEach((file) => formData.append("images", file));
+
+            const res = await fetch(`${API_URL}/gyms`, {
+                method: 'POST',
+                credentials: "include",
+                body: formData
+            })
+
+            if (!res.ok || !res){
+                Swal.fire({
+                    position: "top-end",
+                    title: 'No se pudo guardar el gimnasio',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
+                return false;
+            }
+
+            Swal.fire({
+                position: "top-end",
+                title: 'Gimnasio guardado correctamente',
+                icon: 'success',
+                timer: 2500,
+                showConfirmButton: false,
+            });
+
+            return true;
+        } catch (error) {
+            console.log("Error: " + error);
+            Swal.fire({
+                position: "top-end",
+                title: 'Error interno del servidor',
+                icon: 'error',
+                timer: 2500
+            });
+            return false;
+        } finally {
+            setLoadingGyms(false)
+        }
+    }
+
+    const getGymById = async (id) => {
+        try {
+            setLoadingGyms(true)
+
+            const res = await fetch(`${API_URL}/gyms/${id}`, {
+                credentials: "include",
+            })
+
+            if (!res.ok || !res){
+                Swal.fire({
+                    position: "top-end",
+                    title: 'No se pudo traer el gimnasio',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
+                return;
+            }
+
+            const json = await res.json();
+            setGymSeleccionado(json);
+            return json;
+        } catch (error) {
+            console.log("Error: " + error);
+            Swal.fire({
+                position: "top-end",
+                title: 'Error interno del servidor',
+                icon: 'error',
+                timer: 2500
+            });
+        } finally {
+            setLoadingGyms(false)
+        }
+    }
+
+    const updateGym = async (id, gymData) => {
+        try {
+            setLoadingGyms(true)
+
+            const formData = new FormData();
+            formData.append("name", gymData.name);
+            formData.append("description", gymData.description);
+            formData.append("address", gymData.address);
+            formData.append("city", gymData.city);
+            formData.append("municipio", gymData.municipio);
+            gymData.images.forEach((file) => formData.append("images", file));
+
+            const res = await fetch(`${API_URL}/gyms/${id}`, {
+                method: 'PUT',
+                credentials: "include",
+                body: formData
+            })
+
+            if (!res.ok || !res){
+                Swal.fire({
+                    position: "top-end",
+                    title: 'No se pudo actualizar el gimnasio',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
+                return false;
+            }
+
+            Swal.fire({
+                position: "top-end",
+                title: 'Gimnasio actualizado correctamente',
+                icon: 'success',
+                timer: 2500,
+                showConfirmButton: false,
+            });
+
+            return true;
+        } catch (error) {
+            console.log("Error: " + error);
+            Swal.fire({
+                position: "top-end",
+                title: 'Error interno del servidor',
+                icon: 'error',
+                timer: 2500
+            });
+            return false;
+        } finally {
+            setLoadingGyms(false)
+        }
+    }
+
+    const deleteGym = async (id) => {
+        try {
+            setLoadingGyms(true)
+
+            const res = await fetch(`${API_URL}/gyms/${id}`, {
+                method: 'DELETE',
+                credentials: "include",
+            })
+
+            if (!res.ok || !res){
+                Swal.fire({
+                    position: "top-end",
+                    title: 'No se pudo eliminar el gimnasio',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
+                return false;
+            }
+
+            Swal.fire({
+                position: "top-end",
+                title: 'Gimnasio eliminado correctamente',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+            });
+
+            return true;
+        } catch (error) {
+            console.log("Error: " + error);
+            Swal.fire({
+                position: "top-end",
+                title: 'Error interno del servidor',
+                icon: 'error',
+                timer: 2500
+            });
+            return false;
+        } finally {
+            setLoadingGyms(false)
+        }
+    }
+
     const searchGymByName = async (campo) => {
         try {
             /* setLoadingGyms(true) */
@@ -110,6 +293,7 @@ const useGyms = () => {
     return {
         listaGyms,
         gymDetail,
+        gymSeleccionado,
         pagina,
         setPagina,
         totalPaginas,
@@ -117,6 +301,10 @@ const useGyms = () => {
         limitePagina,
         setListaGyms,
         getGymsPaginated, // <- Traer los productos paginados
+        insertGym, // <- Crear un nuevo gimnasio
+        getGymById, // <- Traer un gimnasio por id
+        updateGym, // <- Actualizar un gimnasio existente
+        deleteGym, // <- Eliminar un gimnasio
         searchGymByName, //<- Buscar Gimnasios por nombre
 
     }
