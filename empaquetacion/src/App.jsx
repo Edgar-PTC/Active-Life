@@ -30,6 +30,7 @@ import AccederAdmin from "./Pages/Admin/Acceder.jsx";
 import GimnasiosAdmin from "./Pages/Admin/Gimnasios";
 import ProductosAdmin from "./Pages/Admin/Productos.jsx";
 import AgregarGimnasio from "./Pages/Admin/AgregarGimnasio";
+import EditarGimnasio from "./Pages/Admin/EditarGimnasio";
 import RegisterAdmin from "./Pages/Admin/Registro";
 import Membresias from "./Pages/Admin/Membresias";
 import Pedidos from "./Pages/Admin/Pedidos";
@@ -121,6 +122,7 @@ function App() {
               {/* Redirección */}
               <Route path="/admin/productos" element={<ProductosAdmin />} />
               <Route path="/admin/gimnasios/agregar" element={<AgregarGimnasio />} />
+              <Route path="/admin/gimnasios/:id/editarGimnasio" element={<EditarGimnasio />} />
               <Route path="/admin/gimnasios" element={<GimnasiosAdmin />} />
               <Route path="/admin/membresias" element={<Membresias />} />
               <Route path="/admin/pedidos" element={<Pedidos />} />

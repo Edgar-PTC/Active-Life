@@ -25,6 +25,9 @@ const gymSchema = new Schema({
     city: {
         type: String
     },
+    municipio: {
+        type: String
+    },
     images: [
         {
             image:{
