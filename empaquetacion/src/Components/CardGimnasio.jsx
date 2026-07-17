@@ -2,15 +2,16 @@ import { Link } from "react-router";
 
 function CardGimnasio({ gym }) {
   const {
+    id,
     nombre = "Fitness Fusion",
     ciudad = "San Salvador",
     zona = "Apopa",
     imagen = "https://res.cloudinary.com/dgv8dcd9n/image/upload/v1776738887/Gym_Free-weights_Area_crpg3c.jpg",
   } = gym ?? {};
- 
+
   return (
     //Card del gimnasio, renderiza la pagina del detalle de gimnasio con la info de acorde con el ID del gimnasio
-     <Link to={"/client/GimnasioDetalle"}
+     <Link to={`/client/GimnasioDetalle/${id}`}
       className="block rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] hover:shadow-lg transition-all duration-200 no-underline"
       >
           <div className="bg-[#7a9e6e] w-full">

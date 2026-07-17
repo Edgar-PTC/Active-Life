@@ -5,6 +5,7 @@ const useGyms = () => {
     const [listaGyms, setListaGyms] = useState([])
     const [gymDetail, setGymDetail] = useState([])
     const [gymSeleccionado, setGymSeleccionado] = useState(null)
+    const [todosLosGyms, setTodosLosGyms] = useState([])
     
     const [loadingGyms, setLoadingGyms] = useState(false)
 
@@ -61,6 +62,40 @@ const useGyms = () => {
         } */
     }
 
+    const getAllGyms = async () => {
+        try {
+            setLoadingGyms(true)
+
+            const res = await fetch(`${API_URL}/gyms`, {
+                credentials: "include",
+            })
+
+            if (!res.ok || !res){
+                Swal.fire({
+                    position: "top-end",
+                    title: 'No se pudo traer los gimnasios',
+                    icon: 'error',
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
+                return;
+            }
+
+            const json = await res.json();
+            setTodosLosGyms(json);
+        } catch (error) {
+            console.log("Error: " + error);
+            Swal.fire({
+                position: "top-end",
+                title: 'Error interno del servidor',
+                icon: 'error',
+                timer: 2500
+            });
+        } finally {
+            setLoadingGyms(false)
+        }
+    }
+
     const insertGym = async (gymData) => {
         try {
             setLoadingGyms(true)
@@ -114,6 +149,8 @@ const useGyms = () => {
     }
 
     const getGymById = async (id) => {
+        if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) return;
+
         try {
             setLoadingGyms(true)
 
@@ -294,6 +331,7 @@ const useGyms = () => {
         listaGyms,
         gymDetail,
         gymSeleccionado,
+        todosLosGyms,
         pagina,
         setPagina,
         totalPaginas,
@@ -301,6 +339,7 @@ const useGyms = () => {
         limitePagina,
         setListaGyms,
         getGymsPaginated, // <- Traer los productos paginados
+        getAllGyms, // <- Traer todos los gimnasios sin paginar
         insertGym, // <- Crear un nuevo gimnasio
         getGymById, // <- Traer un gimnasio por id
         updateGym, // <- Actualizar un gimnasio existente
