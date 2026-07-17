@@ -26,14 +26,14 @@ import wompiRoutes from "./src/routes/wompi.js";
 
 const app = express();
 
-app.use(limiter);
-
 app.use(cors({
     origin: [config.frontend.url],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }))
+
+app.use(limiter);
 app.use(cookieParser());
 
 //que acepte json desde postman

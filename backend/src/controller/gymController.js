@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import gymModel from "../models/gymModel.js";
 import membershipModel from "../models/membershipModel.js";
 
@@ -58,6 +59,10 @@ gymController.getAll = async (req, res) => {
 
 gymController.getByid = async (req, res) => {
     try {
+
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({message: "Id de gimnasio no valido"})
+        }
 
         const gym = await gymModel.findById(req.params.id)
 

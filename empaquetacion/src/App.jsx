@@ -108,7 +108,7 @@ function App() {
             <Route path="/client/carritoCliente" element={<CarritoCliente />} />
             <Route path="/client/PagocarritoCliente" element={<PagoCarritoCliente />} />
             <Route path="/client/Gimnasios" element={<Gimnasios />} />
-            <Route path="/client/GimnasioDetalle" element={<GimnasioDetalle />} />
+            <Route path="/client/GimnasioDetalle/:id" element={<GimnasioDetalle />} />
             <Route path="/client/PagoMembresia" element={<PagoMembresia />} />
             <Route path="/client/tienda" element={<Tienda />} />
             <Route path="/client/productoDetalle/:id" element={<ProductoDetalle/>} />
