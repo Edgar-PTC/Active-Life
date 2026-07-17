@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import {useAuth} from "../../Context/clientContext";
+import usePagoCarrito from "../../hooks/usePagoCarrito";
 import Swal from "sweetalert2";
 
 const PagoCarritoCliente = () => {
     const { Id } = useAuth();
     const navigate = useNavigate();
+    const { procesando, procesarPago } = usePagoCarrito();
 
     const [productos, setProductos] = useState([]);
     const [cartId, setCartId] = useState(null);
     const [subtotal, setSubtotal] = useState(0);
     const [total, setTotal] = useState(0);
     const [cargando, setCargando] = useState(true);
-    const [procesando, setProcesando] = useState(false);
 
     const [titular, setTitular] = useState("");
     const [numeroTarjeta, setNumeroTarjeta] = useState("");
@@ -52,30 +53,16 @@ const PagoCarritoCliente = () => {
             return;
         }
 
-        setProcesando(true);
-        try {
-            const res = await fetch("http://localhost:4000/apiActiveLife/sales", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    shoppingCartId: cartId,
-                    deliveryAddress: "Retiro en tienda",
-                    paymentMethod: "Tarjeta de crédito",
-                    type: "productos"
-                }),
-                credentials: "include",
-            });
+        const exitoso = await procesarPago({
+            clientId: Id,
+            cartId,
+            monto: total,
+            deliveryAddress: "Retiro en tienda",
+        });
 
-            if (res.ok) {
-                await Swal.fire({ title: "¡Pago exitoso!", text: "Tu pedido ha sido registrado.", icon: "success", timer: 2500, showConfirmButton: false });
-                navigate("/client/dashboard");
-            } else {
-                Swal.fire({ title: "Error al procesar el pago", icon: "error", timer: 2500, showConfirmButton: false });
-            }
-        } catch (error) {
-            Swal.fire({ title: "Error de conexión", icon: "error", timer: 2500, showConfirmButton: false });
-        } finally {
-            setProcesando(false);
+        if (exitoso) {
+            await Swal.fire({ title: "¡Pago exitoso!", text: "Tu pedido ha sido registrado.", icon: "success", timer: 2500, showConfirmButton: false });
+            navigate("/client/dashboard");
         }
     };
 
