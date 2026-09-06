@@ -8,13 +8,14 @@
  *   - Swal.fire(...)         -> notify() (Alert nativo). Misma intención, sin UI web.
  *   - LogInCliente(event)    -> logInCliente() sin argumento (no hay evento de <form>).
  *
- * PENDIENTE DE ARQUITECTURA (no bloquea la navegación, hablarlo con backend):
- *   El backend usa auth por COOKIE (cookie-parser + credentials:"include" + CORS
- *   bloqueado a FRONTEND_URL). React Native no comparte el "cookie jar" del navegador
- *   ni manda Origin, así que `verify()` por cookie no va a funcionar tal cual.
- *   Lo normal en native es que el login devuelva un token y guardarlo en AsyncStorage
- *   / SecureStore y mandarlo en `Authorization: Bearer`. Dejo el esqueleto preparado
- *   para enchufar eso sin tocar las pantallas.
+ * AUTH POR COOKIE:
+ *   El backend responde al login con `Set-Cookie: authCookieClient=<jwt>` (no manda
+ *   el token en el body). En React Native el stack nativo de red guarda esa cookie
+ *   automáticamente y la reenvía en las siguientes peticiones al mismo host, así que
+ *   el login funciona sin librerías extra. `credentials: 'include'` deja clara la
+ *   intención. La sesión "recordada" entre reinicios la damos con AsyncStorage
+ *   (Id + Nombre); si más adelante el backend devuelve el token en el body, basta
+ *   con guardarlo en STORAGE_KEYS.token y mandarlo como `Authorization: Bearer`.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -70,39 +71,47 @@ export function SessionProvider({ children }) {
     setPassword('');
   }, []);
 
+  /**
+   * Inicia sesión contra POST /apiActiveLife/logInClients.
+   * Devuelve true si el login fue correcto (para que la pantalla reaccione si quiere).
+   */
   const logInCliente = useCallback(async () => {
-    if (!email || !password) {
+    if (!email.trim() || !password) {
       notify('Completa ambos campos para verificar tu identidad');
-      return;
+      return false;
     }
     try {
       setLoading(true);
       const res = await fetch(apiUrl('/logInClients'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        credentials: 'include',
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
+      const json = await res.json().catch(() => ({}));
+
       if (!res.ok) {
-        const json = await res.json().catch(() => ({}));
+        // Mensajes exactos que devuelve logInClientsController.js
+        const minutos = Math.max(1, Math.round((json.time ?? 0) / 60000));
         const messages = {
-          'Email not found': 'No existe ningún usuario con este correo',
+          'Email not found': 'No existe ninguna cuenta con este correo',
           'Contraseña incorrecta': 'Contraseña incorrecta. Inténtalo de nuevo',
-          'Cuenta bloqueada': `Cuenta bloqueada. Espera ${Math.round(
-            (json.time ?? 0) / 60000,
-          )} minutos`,
+          'Cuenta bloqueada': `Cuenta bloqueada por intentos fallidos. Espera ${minutos} min`,
         };
         notify(messages[json.message] ?? 'No se pudo iniciar sesión');
-        return;
+        return false;
       }
 
-      const json = await res.json();
+      // Éxito: { message, Id, Nombre }  (+ cookie authCookieClient)
       await persistSession(json);
       setPassword('');
-      // El cambio a las tabs del cliente lo hace RootNavigator al cambiar isLoggedIn.
+      // RootNavigator cambia solo a las tabs del cliente al ponerse isLoggedIn = true.
+      return true;
     } catch (error) {
       console.log('Error login:', error);
-      notify('Error interno del servidor');
+      notify('No se pudo conectar con el servidor. Revisa tu conexión y la URL del API.');
+      return false;
     } finally {
       setLoading(false);
     }
