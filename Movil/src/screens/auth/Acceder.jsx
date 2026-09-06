@@ -1,38 +1,38 @@
 /**
- * INICIO DE SESIÓN — adaptación funcional de
- * `empaquetacion/src/Pages/Web - Client/Acceder.jsx`.
+ * INICIO DE SESION — adaptación funcional de
+ * `empaquetacion/src/Pages/Web - Client/Acceder.jsx`, con el diseño del boceto móvil:
+ * foto de fondo a pantalla completa + tarjeta esmerilada anclada al borde inferior.
  *
- * Misma funcionalidad que la web:
- *   - campos Correo / Contraseña guardados en el contexto de sesión
+ * Funcionalidad intacta:
+ *   - Correo / Contraseña guardados en el contexto de sesión
  *   - botón que llama a logInCliente() y muestra "Comprobando..." mientras carga
- *   - enlaces a Registro y Recuperar contraseña
+ *   - "Registrarse" -> pantalla de Registro
  * Al iniciar sesión con éxito, RootNavigator cambia solo a las tabs del cliente.
  */
+import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
-import { useState } from 'react';
 import {
   ActivityIndicator,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Brand } from '@/theme/brand';
 import { useAuth } from '@/context/session-context';
 
+const BG_URL =
+  'https://res.cloudinary.com/dvtk6ky3t/image/upload/v1788730484/Gemini_Generated_Foto_Inicio_Movil_pjf5tg.png';
 const LOGO_URL =
   'https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776401728/Gemini_Generated_Logo_gyanzj.png';
 
 export default function Acceder({ navigation }) {
+  const insets = useSafeAreaInsets();
   const { email, password, setEmail, setPassword, logInCliente, loading } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = () => {
     Keyboard.dismiss();
@@ -40,150 +40,145 @@ export default function Acceder({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <View style={styles.root}>
+      <Image source={{ uri: BG_URL }} style={StyleSheet.absoluteFill} contentFit="cover" />
+
+      <View style={styles.card}>
+        <BlurView intensity={45} tint="light" style={StyleSheet.absoluteFill} />
+        <View style={styles.cardTint} />
+
         <ScrollView
-          contentContainerStyle={styles.scroll}
+          contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 26 }]}
           keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.card}>
-            <Image
-              source={LOGO_URL}
-              style={styles.logo}
-              contentFit="contain"
-              transition={200}
-            />
-            <Text style={styles.title}>INICIO DE SESIÓN</Text>
+          showsVerticalScrollIndicator={false}
+          bounces={false}>
+          <Image
+            source={LOGO_URL}
+            style={styles.logo}
+            contentFit="contain"
+            transition={200}
+          />
+          <Text style={styles.title}>INICIO DE SESION</Text>
 
-            <View style={styles.field}>
-              <Text style={styles.label}>Correo electrónico</Text>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="tucorreo@ejemplo.com"
-                placeholderTextColor={Brand.muted}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="email-address"
-                returnKeyType="next"
-                editable={!loading}
-              />
-            </View>
+          <Text style={styles.label}>Correo Electronico</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            returnKeyType="next"
+            editable={!loading}
+          />
 
-            <View style={styles.field}>
-              <Text style={styles.label}>Contraseña</Text>
-              <View style={styles.passwordRow}>
-                <TextInput
-                  style={[styles.input, styles.passwordInput]}
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder="••••••••"
-                  placeholderTextColor={Brand.muted}
-                  secureTextEntry={!showPassword}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  returnKeyType="go"
-                  onSubmitEditing={onSubmit}
-                  editable={!loading}
-                />
-                <Pressable
-                  style={styles.toggle}
-                  onPress={() => setShowPassword((v) => !v)}
-                  hitSlop={8}>
-                  <Text style={styles.toggleText}>{showPassword ? 'Ocultar' : 'Ver'}</Text>
-                </Pressable>
+          <Text style={styles.label}>Contraseña</Text>
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoCapitalize="none"
+            autoCorrect={false}
+            returnKeyType="go"
+            onSubmitEditing={onSubmit}
+            editable={!loading}
+          />
+
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.85}
+            onPress={onSubmit}
+            disabled={loading}>
+            {loading ? (
+              <View style={styles.buttonRow}>
+                <ActivityIndicator color="#FFFFFF" />
+                <Text style={styles.buttonText}>Comprobando...</Text>
               </View>
-            </View>
+            ) : (
+              <Text style={styles.buttonText}>Iniciar sesion</Text>
+            )}
+          </TouchableOpacity>
 
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                (pressed || loading) && styles.buttonPressed,
-              ]}
-              onPress={onSubmit}
-              disabled={loading}>
-              {loading ? (
-                <View style={styles.buttonLoading}>
-                  <ActivityIndicator color={Brand.white} />
-                  <Text style={styles.buttonText}>Comprobando...</Text>
-                </View>
-              ) : (
-                <Text style={styles.buttonText}>Iniciar sesión</Text>
-              )}
-            </Pressable>
-
-            <View style={styles.links}>
-              <Text style={styles.linkMuted}>
-                ¿No tienes cuenta?{' '}
-                <Text style={styles.link} onPress={() => navigation.navigate('Registro')}>
-                  Regístrate
-                </Text>
-              </Text>
-              <Text style={styles.link} onPress={() => navigation.navigate('Recuperacion')}>
-                Recuperar contraseña
-              </Text>
-            </View>
-          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Registro')} activeOpacity={0.7}>
+            <Text style={styles.registrarse}>Registrarse</Text>
+          </TouchableOpacity>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Brand.green },
-  flex: { flex: 1 },
-  scroll: { flexGrow: 1, justifyContent: 'center', padding: 20 },
+  root: { flex: 1, backgroundColor: '#B9AFA4' },
   card: {
-    backgroundColor: Brand.white,
-    borderRadius: 24,
-    padding: 24,
-    gap: 14,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '70%',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(116,136,116,0.36)',
   },
-  logo: { width: 120, height: 120, alignSelf: 'center' },
+  cardTint: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.10)',
+  },
+  content: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 30,
+    paddingTop: 24,
+    paddingBottom: 8,
+  },
+  logo: { width: 200, height: 52, alignSelf: 'center' },
   title: {
-    textAlign: 'center',
-    color: Brand.ink,
+    alignSelf: 'center',
+    color: '#FFFFFF',
     fontWeight: '800',
-    fontSize: 22,
+    fontSize: 28,
     letterSpacing: 1,
-    marginBottom: 4,
+    marginTop: 12,
+    marginBottom: 22,
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowRadius: 8,
+    textShadowOffset: { width: 0, height: 1 },
   },
-  field: { gap: 6 },
-  label: { color: Brand.greenDark, fontWeight: '600', fontSize: 13 },
+  label: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    marginBottom: 7,
+    marginTop: 10,
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowRadius: 6,
+  },
   input: {
-    borderWidth: 1,
-    borderColor: '#DDE4D6',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 15,
-    color: Brand.ink,
-    backgroundColor: '#FAFCF8',
-  },
-  passwordRow: { position: 'relative', justifyContent: 'center' },
-  passwordInput: { paddingRight: 64 },
-  toggle: { position: 'absolute', right: 12, paddingVertical: 6, paddingHorizontal: 4 },
-  toggleText: { color: Brand.greenDark, fontWeight: '700', fontSize: 13 },
-  button: {
-    backgroundColor: Brand.green,
-    borderRadius: 999,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    paddingHorizontal: 16,
     paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 6,
+    fontSize: 15,
+    color: '#2C3E1F',
   },
-  buttonPressed: { opacity: 0.85 },
-  buttonLoading: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  buttonText: { color: Brand.white, fontWeight: '700', fontSize: 16 },
-  links: { alignItems: 'center', gap: 10, marginTop: 4 },
-  linkMuted: { color: Brand.muted, fontSize: 14 },
-  link: { color: Brand.greenDark, fontWeight: '700', fontSize: 14 },
+  button: {
+    backgroundColor: '#8BB96B',
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 22,
+  },
+  buttonRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  buttonText: { color: '#FFFFFF', fontWeight: '800', fontSize: 16 },
+  registrarse: {
+    textAlign: 'center',
+    color: '#20301A',
+    fontWeight: '700',
+    fontSize: 14,
+    marginTop: 18,
+    textShadowColor: 'rgba(255,255,255,0.5)',
+    textShadowRadius: 5,
+  },
 });

@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { CartProvider } from '@/context/cart-context';
 import { SessionProvider } from '@/context/session-context';
 import RootNavigator from '@/navigation/RootNavigator';
 
@@ -18,10 +19,12 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <SessionProvider>
-          <NavigationContainer>
-            <RootNavigator />
-          </NavigationContainer>
-          <StatusBar style="dark" />
+          <CartProvider>
+            <NavigationContainer>
+              <RootNavigator />
+            </NavigationContainer>
+            <StatusBar style="dark" />
+          </CartProvider>
         </SessionProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
