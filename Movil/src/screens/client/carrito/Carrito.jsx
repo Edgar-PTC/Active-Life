@@ -5,7 +5,7 @@
  */
 import { Image } from 'expo-image';
 import { CreditCard, ShoppingCart } from 'lucide-react-native';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CartItem from '@/components/CartItem';
@@ -36,17 +36,17 @@ export default function Carrito({ navigation }) {
   const puedesPagar = productos.length > 0 && !loading;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.header}>
-        <Image source={LOGO_URL} style={styles.logo} contentFit="contain" />
-        <Text style={styles.crumb}> • Carrito</Text>
+    <SafeAreaView className="flex-1 bg-brand-sage" edges={['top']}>
+      <View className="flex-row items-center px-5 pb-3.5 pt-2">
+        <Image source={LOGO_URL} className="h-[26px] w-32" contentFit="contain" />
+        <Text className="text-[18px] font-extrabold text-brand-crumb"> • Carrito</Text>
       </View>
 
-      <View style={styles.banner}>
-        <View style={styles.bannerIcon}>
+      <View className="mx-4 mb-3.5 flex-row items-center rounded-2xl bg-brand-green-med/35 px-3 py-3">
+        <View className="h-11 w-11 items-center justify-center rounded-full bg-brand-green-med">
           <ShoppingCart size={20} color={Brand.white} />
         </View>
-        <Text style={styles.bannerText}>
+        <Text className="flex-1 text-center text-base font-extrabold text-brand-green-dark">
           {totalItems} {totalItems === 1 ? 'Producto pendiente' : 'Productos pendientes'}
         </Text>
       </View>
@@ -54,8 +54,8 @@ export default function Carrito({ navigation }) {
       <FlatList
         data={productos}
         keyExtractor={(item) => String(item.productId)}
-        contentContainerStyle={styles.list}
-        ItemSeparatorComponent={() => <View style={styles.sep} />}
+        contentContainerClassName="grow px-4 pb-4"
+        ItemSeparatorComponent={() => <View className="h-3" />}
         renderItem={({ item }) => (
           <CartItem
             producto={item}
@@ -66,83 +66,30 @@ export default function Carrito({ navigation }) {
         )}
         ListEmptyComponent={
           loading ? (
-            <ActivityIndicator color={Brand.greenDark} style={styles.empty} />
+            <ActivityIndicator color={Brand.greenDark} className="items-center justify-center py-[70px]" />
           ) : (
-            <View style={styles.empty}>
-              <Text style={styles.emptyText}>Tu carrito está vacío</Text>
+            <View className="items-center justify-center gap-2 py-[70px]">
+              <Text className="text-[15px] text-brand-muted">Tu carrito está vacío</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Tienda')} activeOpacity={0.7}>
-                <Text style={styles.emptyLink}>Ir a la tienda</Text>
+                <Text className="text-[15px] font-bold text-brand-green-dark">Ir a la tienda</Text>
               </TouchableOpacity>
             </View>
           )
         }
       />
 
-      <View style={styles.footer}>
+      <View className="px-4 pb-3 pt-1.5">
         <TouchableOpacity
-          style={[styles.payButton, !puedesPagar && styles.payDisabled]}
+          className={`flex-row items-center justify-center gap-2.5 rounded-[18px] bg-brand-button py-[17px] ${
+            puedesPagar ? '' : 'opacity-50'
+          }`}
           disabled={!puedesPagar}
           activeOpacity={0.85}
           onPress={() => navigation.navigate('PagoCarrito')}>
           <CreditCard size={20} color={Brand.white} />
-          <Text style={styles.payText}>Pagar</Text>
+          <Text className="text-lg font-extrabold text-white">Pagar</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Brand.sage },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 14,
-  },
-  logo: { width: 128, height: 26 },
-  crumb: { fontSize: 18, fontWeight: '800', color: '#5C5140' },
-  banner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 16,
-    marginBottom: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    backgroundColor: 'rgba(138,168,120,0.35)',
-  },
-  bannerIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Brand.greenMed,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bannerText: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '800',
-    color: Brand.greenDark,
-  },
-  list: { paddingHorizontal: 16, paddingBottom: 16, flexGrow: 1 },
-  sep: { height: 12 },
-  empty: { alignItems: 'center', justifyContent: 'center', paddingVertical: 70, gap: 8 },
-  emptyText: { color: Brand.muted, fontSize: 15 },
-  emptyLink: { color: Brand.greenDark, fontWeight: '700', fontSize: 15 },
-  footer: { paddingHorizontal: 16, paddingTop: 6, paddingBottom: 12 },
-  payButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    backgroundColor: Brand.button,
-    borderRadius: 18,
-    paddingVertical: 17,
-  },
-  payDisabled: { opacity: 0.5 },
-  payText: { color: Brand.white, fontSize: 18, fontWeight: '800' },
-});

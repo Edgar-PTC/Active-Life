@@ -15,7 +15,6 @@ import {
   ActivityIndicator,
   Keyboard,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -30,6 +29,15 @@ const BG_URL =
 const LOGO_URL =
   'https://res.cloudinary.com/dvtk6ky3t/image/upload/v1776401728/Gemini_Generated_Logo_gyanzj.png';
 
+// RN no tiene utilidad de text-shadow en Tailwind v3; se aplica como style suelto.
+const shadowDark = {
+  textShadowColor: 'rgba(0,0,0,0.4)',
+  textShadowOffset: { width: 0, height: 1 },
+  textShadowRadius: 8,
+};
+const shadowDarkSm = { textShadowColor: 'rgba(0,0,0,0.4)', textShadowRadius: 6 };
+const shadowLight = { textShadowColor: 'rgba(255,255,255,0.5)', textShadowRadius: 5 };
+
 export default function Acceder({ navigation }) {
   const insets = useSafeAreaInsets();
   const { email, password, setEmail, setPassword, logInCliente, loading } = useAuth();
@@ -40,29 +48,31 @@ export default function Acceder({ navigation }) {
   };
 
   return (
-    <View style={styles.root}>
-      <Image source={{ uri: BG_URL }} style={StyleSheet.absoluteFill} contentFit="cover" />
+    <View className="flex-1 bg-brand-sand">
+      <Image source={{ uri: BG_URL }} className="absolute inset-0" contentFit="cover" />
 
-      <View style={styles.card}>
-        <BlurView intensity={45} tint="light" style={StyleSheet.absoluteFill} />
-        <View style={styles.cardTint} />
+      <View className="absolute inset-x-0 bottom-0 h-[70%] overflow-hidden rounded-t-[40px] bg-[#748874]/[0.36]">
+        <BlurView intensity={45} tint="light" className="absolute inset-0" />
+        <View className="absolute inset-0 bg-white/10" />
 
         <ScrollView
-          contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 26 }]}
+          contentContainerClassName="grow justify-center px-[30px] pb-2 pt-6"
+          contentContainerStyle={{ paddingBottom: insets.bottom + 26 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           bounces={false}>
-          <Image
-            source={LOGO_URL}
-            style={styles.logo}
-            contentFit="contain"
-            transition={200}
-          />
-          <Text style={styles.title}>INICIO DE SESION</Text>
+          <Image source={LOGO_URL} className="h-[52px] w-[200px] self-center" contentFit="contain" transition={200} />
+          <Text
+            className="mb-[22px] mt-3 self-center text-[28px] font-extrabold tracking-[1px] text-white"
+            style={shadowDark}>
+            INICIO DE SESION
+          </Text>
 
-          <Text style={styles.label}>Correo Electronico</Text>
+          <Text className="mb-[7px] mt-2.5 text-sm text-white" style={shadowDarkSm}>
+            Correo Electronico
+          </Text>
           <TextInput
-            style={styles.input}
+            className="rounded-[14px] bg-white px-4 py-3.5 text-[15px] text-brand-ink"
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -72,9 +82,11 @@ export default function Acceder({ navigation }) {
             editable={!loading}
           />
 
-          <Text style={styles.label}>Contraseña</Text>
+          <Text className="mb-[7px] mt-2.5 text-sm text-white" style={shadowDarkSm}>
+            Contraseña
+          </Text>
           <TextInput
-            style={styles.input}
+            className="rounded-[14px] bg-white px-4 py-3.5 text-[15px] text-brand-ink"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -86,99 +98,27 @@ export default function Acceder({ navigation }) {
           />
 
           <TouchableOpacity
-            style={styles.button}
+            className="mt-[22px] items-center justify-center rounded-2xl bg-brand-button py-4"
             activeOpacity={0.85}
             onPress={onSubmit}
             disabled={loading}>
             {loading ? (
-              <View style={styles.buttonRow}>
+              <View className="flex-row items-center gap-2.5">
                 <ActivityIndicator color="#FFFFFF" />
-                <Text style={styles.buttonText}>Comprobando...</Text>
+                <Text className="text-base font-extrabold text-white">Comprobando...</Text>
               </View>
             ) : (
-              <Text style={styles.buttonText}>Iniciar sesion</Text>
+              <Text className="text-base font-extrabold text-white">Iniciar sesion</Text>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Registro')} activeOpacity={0.7}>
-            <Text style={styles.registrarse}>Registrarse</Text>
+            <Text className="mt-[18px] text-center text-sm font-bold text-brand-ink-dark" style={shadowLight}>
+              Registrarse
+            </Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#B9AFA4' },
-  card: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '70%',
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    overflow: 'hidden',
-    backgroundColor: 'rgba(116,136,116,0.36)',
-  },
-  cardTint: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255,255,255,0.10)',
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-    paddingTop: 24,
-    paddingBottom: 8,
-  },
-  logo: { width: 200, height: 52, alignSelf: 'center' },
-  title: {
-    alignSelf: 'center',
-    color: '#FFFFFF',
-    fontWeight: '800',
-    fontSize: 28,
-    letterSpacing: 1,
-    marginTop: 12,
-    marginBottom: 22,
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowRadius: 8,
-    textShadowOffset: { width: 0, height: 1 },
-  },
-  label: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    marginBottom: 7,
-    marginTop: 10,
-    textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowRadius: 6,
-  },
-  input: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: '#2C3E1F',
-  },
-  button: {
-    backgroundColor: '#8BB96B',
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 22,
-  },
-  buttonRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  buttonText: { color: '#FFFFFF', fontWeight: '800', fontSize: 16 },
-  registrarse: {
-    textAlign: 'center',
-    color: '#20301A',
-    fontWeight: '700',
-    fontSize: 14,
-    marginTop: 18,
-    textShadowColor: 'rgba(255,255,255,0.5)',
-    textShadowRadius: 5,
-  },
-});

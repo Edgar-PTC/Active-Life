@@ -1,4 +1,5 @@
 import './src/global.css';
+import './src/lib/nativewind';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
