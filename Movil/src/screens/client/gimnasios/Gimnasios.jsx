@@ -4,7 +4,7 @@ export default function Gimnasios() {
   return (
     <ScreenPlaceholder
       title="Gimnasios"
-      owner="Pablo"
+      owner="Emilio"
       source="Web - Client/Gimnasios.jsx"
       note="Navega al detalle con navigation.navigate('GimnasioDetalle', { id })"
     />

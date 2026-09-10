@@ -5,7 +5,7 @@ export default function GimnasioDetalle({ route }) {
   return (
     <ScreenPlaceholder
       title={`Gimnasio ${id ?? ''}`}
-      owner="Pablo"
+      owner="Emilio"
       source="Web - Client/GimnasioDetalle.jsx (+ Reseñas.jsx embebido)"
       note="El id llega por route.params. Botón de membresía -> navigation.navigate('PagoMembresia', {...})"
     />

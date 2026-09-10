@@ -5,9 +5,17 @@
  * obtener el cartId y el resumen. "Finalizar Pago" dispara el flujo Wompi de prueba
  * (usePagoCarrito) y, si aprueba, registra la venta y vuelve a Inicio.
  */
-import { ChevronDown, ChevronLeft, Lock, ShoppingCart } from 'lucide-react-native';
+import { ChevronDown, ChevronLeft, CreditCard, Lock, ShoppingCart } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useCarShop } from '@/context/cart-context';
@@ -26,6 +34,13 @@ export default function PagoCarrito({ navigation }) {
   const [productos, setProductos] = useState([]);
   const [cartId, setCartId] = useState(null);
   const [total, setTotal] = useState(0);
+
+  // Datos de la tarjeta. Igual que en la web, solo se validan que estén completos:
+  // el cobro de prueba de Wompi se hace con tokenTarjeta 'null' (ver usePagoCarrito).
+  const [titular, setTitular] = useState('');
+  const [numeroTarjeta, setNumeroTarjeta] = useState('');
+  const [fechaExp, setFechaExp] = useState('');
+  const [cvv, setCvv] = useState('');
 
   useEffect(() => {
     let vivo = true;
@@ -49,6 +64,10 @@ export default function PagoCarrito({ navigation }) {
   }, [Id, sincronizarConServidor]);
 
   const finalizarPago = async () => {
+    if (!titular.trim() || !numeroTarjeta.trim() || !fechaExp.trim() || !cvv.trim()) {
+      Alert.alert('Datos incompletos', 'Completa todos los datos de la tarjeta');
+      return;
+    }
     const exitoso = await procesarPago({
       clientId: Id,
       cartId,
@@ -146,6 +165,62 @@ export default function PagoCarrito({ navigation }) {
           <View className="w-px self-stretch bg-white/35" />
           <View className="flex-1 flex-row items-center justify-center gap-1">
             <Text className="text-[15px] font-bold text-white">Mastercard / VISA</Text>
+          </View>
+        </View>
+
+        {/* Datos de la tarjeta */}
+        <View className="mt-4 flex-row items-center gap-2">
+          <CreditCard size={18} color={Brand.greenDark} />
+          <Text className="text-base font-black text-brand-green-dark">Datos de la tarjeta</Text>
+        </View>
+
+        <View className="mt-2.5 rounded-[14px] bg-brand-green-med p-4">
+          <Text className="mb-1.5 text-sm font-semibold text-white">Nombre del titular</Text>
+          <TextInput
+            className="mb-3.5 rounded-xl bg-white px-4 py-3 text-brand-ink"
+            value={titular}
+            onChangeText={setTitular}
+            placeholder="Nombre como aparece en la tarjeta"
+            placeholderTextColor="#9DAE95"
+            autoCapitalize="words"
+          />
+
+          <Text className="mb-1.5 text-sm font-semibold text-white">Numero de tarjeta</Text>
+          <TextInput
+            className="mb-3.5 rounded-xl bg-white px-4 py-3 text-brand-ink"
+            value={numeroTarjeta}
+            onChangeText={setNumeroTarjeta}
+            placeholder="0000 0000 0000 0000"
+            placeholderTextColor="#9DAE95"
+            keyboardType="number-pad"
+            maxLength={16}
+          />
+
+          <View className="flex-row gap-3">
+            <View className="flex-1">
+              <Text className="mb-1.5 text-sm font-semibold text-white">Fecha de expiracion</Text>
+              <TextInput
+                className="rounded-xl bg-white px-4 py-3 text-brand-ink"
+                value={fechaExp}
+                onChangeText={setFechaExp}
+                placeholder="MM/AA"
+                placeholderTextColor="#9DAE95"
+                maxLength={5}
+              />
+            </View>
+            <View className="flex-1">
+              <Text className="mb-1.5 text-sm font-semibold text-white">CVV</Text>
+              <TextInput
+                className="rounded-xl bg-white px-4 py-3 text-brand-ink"
+                value={cvv}
+                onChangeText={setCvv}
+                placeholder="000"
+                placeholderTextColor="#9DAE95"
+                keyboardType="number-pad"
+                secureTextEntry
+                maxLength={4}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
