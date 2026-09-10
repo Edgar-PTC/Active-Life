@@ -1,56 +1,75 @@
-# Welcome to your Expo app 👋
+# ActiveLife — App móvil (Expo Go)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Port a React Native del cliente web (`empaquetacion/src/Pages/Web - Client`).
 
-## Get started
+- **Expo SDK 57**, corre en **Expo Go** (sin build nativo).
+- **JavaScript** (sin TypeScript).
+- Arranca por `index.js` → `App.jsx`.
+- Navegación con **React Navigation** (no expo-router).
+- Estilos con **NativeWind** (Tailwind) + paleta en `src/theme/brand.js`.
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Arrancar
 
 ```bash
-npm run reset-project
+npm install
+npx expo start        # abre con Expo Go escaneando el QR
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Si el login no conecta: en un dispositivo real `localhost` no vale. Edita
+`src/constants/config.js` (o exporta `EXPO_PUBLIC_API_URL`) con la IP LAN de la
+PC que corre el backend, p. ej. `http://192.168.1.50:4000/apiActiveLife`.
 
-### Other setup steps
+## Estructura
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```
+index.js                     registerRootComponent(App)
+App.jsx                      providers (GestureHandler, SafeArea, Session, NavigationContainer)
+src/
+  navigation/
+    RootNavigator.jsx        switch sesión: Auth  <->  Client
+    AuthNavigator.jsx        stack sin sesión
+    ClientNavigator.jsx      barra de tabs + stacks anidados (detalle/pago)
+  screens/
+    auth/       Acceder · Registro · VerificarCorreo · Recuperacion
+    client/     Inicio
+    client/gimnasios/  Gimnasios · GimnasioDetalle · PagoMembresia
+    client/tienda/     Tienda · ProductoDetalle
+    client/carrito/    Carrito · PagoCarrito
+    client/perfil/     Perfil
+  context/session-context.jsx   useAuth() — login, logout, rehidratación
+  components/ScreenPlaceholder.jsx
+  constants/config.js         URL del backend
+  theme/brand.js              colores ActiveLife
+  global.css                  directivas de Tailwind
+```
 
-## Learn more
+El alias `@/…` apunta a `src/…` (configurado en `jsconfig.json`).
 
-To learn more about developing your project with Expo, look at the following resources:
+## Navegar entre pantallas
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```js
+navigation.navigate('ProductoDetalle', { id });   // ir al detalle
+const { id } = route.params ?? {};                // leerlo en el destino
+```
 
-## Join the community
+No hace falta redirigir tras el login: al poner `isLoggedIn = true` en el
+contexto, `RootNavigator` cambia solo al stack del cliente.
 
-Join our community of developers creating universal apps.
+## Reparto de pantallas
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Pantalla | Responsable | Origen web |
+|---|---|---|
+| Acceder | Edgar | Acceder.jsx |
+| Registro · VerificarCorreo · Recuperacion | Chris | RegistroClient / VerificarCorreoClient / RecuperacionContra |
+| Inicio | Emilio | Dashboard.jsx |
+| Gimnasios · GimnasioDetalle · PagoMembresia | Pablo | Gimnasios / GimnasioDetalle (+Reseñas) / PagoMembresia |
+| Tienda · ProductoDetalle · Carrito · PagoCarrito | Edgar | Tienda / ProductoDetalle / CarritoCliente / PagoCarritoCliente |
+| Perfil | Pablo | Perfil.jsx |
+
+## Pendiente (backend)
+
+El backend autentica por **cookie** (`credentials: "include"` + CORS a `FRONTEND_URL`).
+React Native no comparte cookies del navegador, así que `verify()` por cookie no
+funciona tal cual: lo normal es que el login devuelva un **token** y guardarlo en
+AsyncStorage / SecureStore + `Authorization: Bearer`. El hueco está marcado con
+`TODO(backend)` en `src/context/session-context.jsx`.
