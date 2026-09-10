@@ -13,6 +13,11 @@ export const Brand = {
   danger: '#C0392B',
   muted: '#6B7B5E',
 
+  // Dashboard de cliente (Inicio)
+  pageBg: '#CFD9C7', // --green_CFD9C7 (fondo de las pantallas de cliente/admin en web)
+  heading: '#455942', // --green_455942 (títulos oscuros sobre pageBg)
+  textGray: '#414141', // --gray (texto secundario en web)
+
   // Bocetos de carrito / pago
   sage: '#CFD9C7', // fondo de pantalla (carrito / pago)
   mist: '#DCE7D2', // fondo de pantalla (tienda)
