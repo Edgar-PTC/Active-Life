@@ -15,5 +15,5 @@ export const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:4000/apiActiveLife';
 
 /** Ayuda para construir endpoints: apiUrl('/logInClients') */
-export const apiUrl = (path: string) =>
+export const apiUrl = (path) =>
   `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;

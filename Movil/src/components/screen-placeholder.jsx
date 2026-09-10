@@ -8,14 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Brand } from '@/theme/brand';
 
-type Props = {
-  title: string;
-  owner: string;
-  source: string; // archivo web de origen
-  note?: string;
-};
-
-export function ScreenPlaceholder({ title, owner, source, note }: Props) {
+export function ScreenPlaceholder({ title, owner, source, note }) {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.box}>

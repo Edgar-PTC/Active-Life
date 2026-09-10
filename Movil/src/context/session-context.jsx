@@ -24,7 +24,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from 'react';
 import { Alert } from 'react-native';
 
@@ -35,34 +34,17 @@ const STORAGE_KEYS = {
   id: 'authId',
   loggedIn: 'authIsLoggedIn',
   token: 'authToken',
-} as const;
-
-// Evita hidratar el contexto con un id corrupto (ej. el string "undefined")
-const esIdValido = (id: string | null): id is string =>
-  typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id);
-
-const notify = (message: string) => Alert.alert('ActiveLife', message);
-
-type SessionValue = {
-  /** true mientras se comprueba la sesión guardada al arrancar */
-  verifying: boolean;
-  /** true mientras hay una petición de login/logout en curso */
-  loading: boolean;
-  isLoggedIn: boolean;
-  Nombre: string;
-  Id: string;
-  email: string;
-  password: string;
-  setEmail: (v: string) => void;
-  setPassword: (v: string) => void;
-  logInCliente: () => Promise<void>;
-  verify: () => Promise<void>;
-  logOut: () => Promise<void>;
 };
 
-const SessionContext = createContext<SessionValue | undefined>(undefined);
+// Evita hidratar el contexto con un id corrupto (ej. el string "undefined")
+const esIdValido = (id) =>
+  typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id);
 
-export function SessionProvider({ children }: { children: ReactNode }) {
+const notify = (message) => Alert.alert('ActiveLife', message);
+
+const SessionContext = createContext(undefined);
+
+export function SessionProvider({ children }) {
   const [verifying, setVerifying] = useState(true);
   const [loading, setLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -70,16 +52,19 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [Id, setId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   /** Guarda los datos de sesión que devuelve el backend. */
   const persistSession = useCallback(
-    async (json: { Id?: string; Nombre?: string; token?: string }) => {
-      const entries: [string, string][] = [
+    async (json) => {
+      const entries = [
         [STORAGE_KEYS.loggedIn, 'true'],
       ];
       if (esIdValido(json.Id ?? null)) {
-        setId(json.Id as string);
-        entries.push([STORAGE_KEYS.id, json.Id as string]);
+        setId(json.Id);
+        entries.push([STORAGE_KEYS.id, json.Id]);
       }
       if (json.Nombre) {
         setNombre(json.Nombre);
@@ -116,7 +101,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
-        const messages: Record<string, string> = {
+        const messages = {
           'Email not found': 'No existe ningún usuario con este correo',
           'Contraseña incorrecta': 'Contraseña incorrecta. Inténtalo de nuevo',
           'Cuenta bloqueada': `Cuenta bloqueada. Espera ${Math.round(
@@ -139,6 +124,89 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }
   }, [email, password, persistSession]);
 
+  /** Port de `Web - Client/RegistroClient.jsx`. Envía los datos y dispara el correo de verificación. */
+  const registrarCliente = useCallback(async () => {
+    if (!name.trim() || !birthDate.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+      notify('Por favor complete todos los datos');
+      return false;
+    }
+    if (password.length < 5) {
+      notify('La contraseña debe contener al menos 5 caracteres');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      notify('La confirmación de contraseña no coincide con la contraseña');
+      return false;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch(apiUrl('/registerClients/'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, birthDate, email, password }),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        const messages = {
+          'Campos incompletos': 'Todos los campos deben ser rellenados',
+          'Fecha invalida': 'La fecha no puede ser hoy o una fecha futura',
+          'email already in use': 'El correo ingresado ya le pertenece a otro usuario',
+          'Password invalid': 'La contraseña no es válida',
+        };
+        notify(messages[json.message] ?? 'Error interno del servidor. Vuelve a intentarlo');
+        return false;
+      }
+
+      setPassword('');
+      setConfirmPassword('');
+      return true;
+    } catch (error) {
+      console.log('Error registro:', error);
+      notify('Error interno del servidor');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [name, birthDate, email, password, confirmPassword]);
+
+  /** Port de `Web - Client/VerificarCorreoClient.jsx`. El correo viaja en la cookie de verificación, no en el body. */
+  const verificarCodigo = useCallback(async (code) => {
+    if (code.length !== 6) {
+      notify('Por favor digita el código completo');
+      return false;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch(apiUrl('/registerClients/verifyCode'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ verificationCodeRequest: code }),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        notify(
+          json.message === 'Invalid code'
+            ? 'Código incorrecto. ¡Vuelve a intentarlo!'
+            : 'Error interno verificando el correo. Vuelve a intentarlo',
+        );
+        return false;
+      }
+
+      notify('Verificación correcta. ¡Bienvenido!');
+      return true;
+    } catch (error) {
+      console.log('Error verificación:', error);
+      notify('Error interno del servidor');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   /** Rehidrata la sesión guardada al abrir la app. */
   const verify = useCallback(async () => {
     try {
@@ -151,7 +219,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
       if (loggedIn === 'true' && esIdValido(id)) {
         setNombre(nombre ?? '');
-        setId(id as string);
+        setId(id);
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
@@ -180,7 +248,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     verify();
   }, [verify]);
 
-  const value = useMemo<SessionValue>(
+  const value = useMemo(
     () => ({
       verifying,
       loading,
@@ -191,11 +259,35 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       password,
       setEmail,
       setPassword,
+      name,
+      setName,
+      birthDate,
+      setBirthDate,
+      confirmPassword,
+      setConfirmPassword,
       logInCliente,
+      registrarCliente,
+      verificarCodigo,
       verify,
       logOut,
     }),
-    [verifying, loading, isLoggedIn, Nombre, Id, email, password, logInCliente, verify, logOut],
+    [
+      verifying,
+      loading,
+      isLoggedIn,
+      Nombre,
+      Id,
+      email,
+      password,
+      name,
+      birthDate,
+      confirmPassword,
+      logInCliente,
+      registrarCliente,
+      verificarCodigo,
+      verify,
+      logOut,
+    ],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

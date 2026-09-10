@@ -3,7 +3,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { ScreenPlaceholder } from '@/components/screen-placeholder';
 
 export default function GimnasioDetalle() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams();
   return (
     <ScreenPlaceholder
       title={`Gimnasio ${id ?? ''}`}
