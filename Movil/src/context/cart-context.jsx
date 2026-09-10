@@ -152,7 +152,7 @@ export function CartProvider({ children }) {
     setLocalCart(carrito);
   }, [carrito]);
 
-  const guardarLocalCarrito = useCallback((idProducto, cantidad) => {
+  const guardarLocalCarrito = useCallback((idProducto, cantidad, meta) => {
     const delta = parseInt(cantidad, 10);
     if (Number.isNaN(delta) || delta === 0) return;
 
@@ -160,9 +160,24 @@ export function CartProvider({ children }) {
       const existente = prev.productos.find((p) => p.productId === idProducto);
       if (!existente) {
         if (delta < 0) return prev;
+        // `meta` (opcional): {name, image, price} del producto para poder pintar
+        // la línea sin esperar al recálculo contra el servidor. La web no lo
+        // necesita porque recalcula en cada montaje de pantalla; aquí el
+        // CartProvider vive una sola vez, así que la primera pintada usa `meta`.
+        const precioUni = meta?.price ?? meta?.precioUni;
         return {
           ...prev,
-          productos: [...prev.productos, { productId: idProducto, quantity: delta }],
+          productos: [
+            ...prev.productos,
+            {
+              productId: idProducto,
+              quantity: delta,
+              name: meta?.name,
+              image: meta?.image,
+              precioUni,
+              subtotal: (precioUni || 0) * delta,
+            },
+          ],
         };
       }
       const nuevaCantidad = existente.quantity + delta;

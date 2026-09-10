@@ -14,9 +14,11 @@ export const Brand = {
   muted: '#6B7B5E',
 
   // Bocetos de carrito / pago
-  sage: '#CFD9C7', // fondo de pantalla
+  sage: '#CFD9C7', // fondo de pantalla (carrito / pago)
+  mist: '#DCE7D2', // fondo de pantalla (tienda)
   greenMed: '#8AA878', // paneles medios (tarjetas de producto, dropdowns)
   greenDeep: '#3F4E33', // fondo oscuro de listas (resumen de compra)
+  greenForest: '#455942', // descripción / chips / botón del detalle de producto
   salmon: '#C98D86', // botón eliminar del carrito
   button: '#8BB96B', // botones de acción (Pagar / Finalizar)
   stepper: '#6B7355', // botones +/- del contador
