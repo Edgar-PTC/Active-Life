@@ -62,12 +62,12 @@ carShopController.getByCliente = async (req, res) => {
 carShopController.insertCart = async (req, res) => {
     try {
 
-        const foundCart = await CarModel.findOne({status: "active"});
+        const {clientId, products} = req.body;
+
+        const foundCart = await CarModel.findOne({clientId, status: "active"});
         if(foundCart){
             return res.status(400).json({message: "You already have an active cart"});
         }
-
-        const {clientId, products} = req.body;
 
         ////////////////////////////// CALCULAR EL SUBTOTAL Y TOTAL //////////////////////////////
         let total = 0;

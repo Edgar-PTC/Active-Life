@@ -19,6 +19,9 @@ authController.client = async(req, res) => {
         const { id } = decoded;
 
         const client = await clientsModel.findById(id);
+        if(!client){
+            return res.status(404).json({ message: "Sin inicio de sesion" });
+        }
 
         const json = {
             "Nombre": client.name,
@@ -27,6 +30,10 @@ authController.client = async(req, res) => {
 
         return res.status(200).json(json);
     } catch (error) {
+        // Token vencido o alterado: se trata como sesion cerrada, no como error del servidor
+        if (error instanceof jsonwebtoken.JsonWebTokenError) {
+            return res.status(401).json({ message: "Sesion expirada" });
+        }
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
     }
@@ -43,6 +50,9 @@ authController.admin = async(req, res) => {
         const { id } = decoded;
 
         const admin = await adminsModel.findById(id);
+        if(!admin){
+            return res.status(404).json({ message: "Sin inicio de sesion" });
+        }
 
         const json = {
             "Nombre": admin.name,
@@ -51,6 +61,10 @@ authController.admin = async(req, res) => {
 
         return res.status(200).json(json);
     } catch (error) {
+        // Token vencido o alterado: se trata como sesion cerrada, no como error del servidor
+        if (error instanceof jsonwebtoken.JsonWebTokenError) {
+            return res.status(401).json({ message: "Sesion expirada" });
+        }
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
     }

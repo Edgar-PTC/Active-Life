@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
 
 import adminsModel from "../models/adminsModel.js";
-import { config } from "../../config.js";
+import { config, cookieOptions } from "../../config.js";
 
 const loginAdminController = {};
 
@@ -94,10 +94,7 @@ loginAdminController.login = async ( req, res ) => {
       );
 
     // 8. Guardar cookie
-    res.cookie(
-      "authCookieAdmin",
-      token
-    );
+    res.cookie("authCookieAdmin", token, { ...cookieOptions, maxAge: 30 * 24 * 60 * 60 * 1000 });
 
     return res.status(200).json({
       message:

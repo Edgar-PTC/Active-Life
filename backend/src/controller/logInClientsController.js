@@ -3,7 +3,7 @@ import jsonwebtoken from "jsonwebtoken";
 
 import clientsModel from "../models/clientsModel.js";
 
-import { config } from "../../config.js";
+import { config, cookieOptions } from "../../config.js";
 
 const logInClientsController = {}
 
@@ -46,6 +46,11 @@ logInClientsController.login = async(req, res) => {
             return res.status(403).json({message: "Contraseña incorrecta"})
         }
 
+        //Si no ha verificado su correo no puede entrar
+        if(!userFound.emailVerification){
+            return res.status(403).json({message: "Verifica tu correo primero"})
+        }
+
         //Si escribio bien la contraseña
         userFound.loginAttemps = 0;
         userFound.timeOut = null;
@@ -58,7 +63,7 @@ logInClientsController.login = async(req, res) => {
         )
 
         //Guardamos el token en una cookie
-        res.cookie("authCookieClient", token);
+        res.cookie("authCookieClient", token, {...cookieOptions, maxAge: 30 * 24 * 60 * 60 * 1000});
 
         return res.status(200).json({
             message: "Inicio de sesion exitoso",
@@ -69,6 +74,11 @@ logInClientsController.login = async(req, res) => {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
     }
+}
+
+logInClientsController.logout = async(req, res) => {
+    res.clearCookie("authCookieClient", cookieOptions);
+    return res.status(200).json({message: "Sesion cerrada"});
 }
 
 export default logInClientsController;

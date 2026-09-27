@@ -1,11 +1,11 @@
-import nodemailer from "nodemailer";
 import crypto from "crypto";
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 import adminsModel from "../models/adminsModel.js";
 import registerEmail from "../utils/registerEmail.js";
-import { config } from "../../config.js";
+import sendEmail from "../utils/sendEmail.js";
+import { config, cookieOptions } from "../../config.js";
 
 const registerAdminController = {};
 
@@ -83,50 +83,35 @@ registerAdminController.insertAdmin = async (req, res) => {
     res.cookie(
       "verificationTokenCookieAdmin",
       tokenCode,
-      {
-        maxAge: 15 * 60 * 1000,
-      }
+      { ...cookieOptions, maxAge: 15 * 60 * 1000 }
     );
 
-    // Configurar correo
-    const transporter =
-      nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: config.email.user_email,
-          pass: config.email.user_password,
-        },
+    // Enviar correo con Mailjet
+    try {
+      await sendEmail({
+        to: email,
+        subject: `Código de verificación: ${verificationCode}`,
+        html: registerEmail(
+          verificationCode,
+          email
+        ),
       });
+    } catch (error) {
+      console.log(error);
 
-    // Opciones del correo
-    const mailOptions = {
-      from: config.email.user_email,
-      to: email,
-      subject: `Código de verificación: ${verificationCode}`,
-      html: registerEmail(
-        verificationCode,
-        email
-      ),
-    };
+      // Si el correo no salió, se borra el admin para que pueda volver a registrarse
+      await adminsModel.deleteOne({ _id: newAdmin._id });
 
-    // Enviar correo
-    transporter.sendMail(
-      mailOptions,
-      (error, info) => {
-        if (error) {
-          console.log(error);
-          return res.status(500).json({
-            message:
-              "Error al enviar correo",
-          });
-        }
+      return res.status(500).json({
+        message:
+          "Error al enviar correo",
+      });
+    }
 
-        return res.status(200).json({
-          message:
-            "Admin registrado correctamente",
-        });
-      }
-    );
+    return res.status(200).json({
+      message:
+        "Admin registrado correctamente",
+    });
   } catch (error) {
     console.log("Error: " + error);
 
@@ -146,6 +131,13 @@ registerAdminController.verifyCode =
       const token =
         req.cookies
           .verificationTokenCookieAdmin;
+
+      if (!token) {
+        return res.status(400).json({
+          message:
+            "Código expirado, solicita uno nuevo",
+        });
+      }
 
       const decoded =
         jsonwebtoken.verify(
@@ -180,7 +172,8 @@ registerAdminController.verifyCode =
       await admin.save();
 
       res.clearCookie(
-        "verificationTokenCookieAdmin"
+        "verificationTokenCookieAdmin",
+        cookieOptions
       );
 
       return res.status(200).json({

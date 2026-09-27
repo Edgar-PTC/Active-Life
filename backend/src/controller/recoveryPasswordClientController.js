@@ -1,10 +1,10 @@
-import nodemailer from "nodemailer"; //enviar correo
 import crypto from "crypto"//
 import jsonwebtoken from "jsonwebtoken"
 import bcrypts from "bcryptjs"
 import recoveryPasswordEmail from "../utils/recoveryPasswordEmail.js"
+import sendEmail from "../utils/sendEmail.js"
 
-import { config } from "../../config.js";
+import { config, cookieOptions } from "../../config.js";
 
 import clientsModel from "../models/clientsModel.js";
 
@@ -35,30 +35,15 @@ recoveryPasswordController.requestCode = async (req, res) => {
             {expiresIn: "15m"}
         );
 
-        res.cookie("recoveryCookie", token, {maxAge: 15 * 60 * 1000});
+        res.cookie("recoveryCookie", token, {...cookieOptions, maxAge: 15 * 60 * 1000});
 
-        //Enviar por correo
-        //1. quien lo envia
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: config.email.user_email,
-                pass: config.email.user_password
-            }
-        })
-
-        //2. Que se envia
-        const mailOptions = {
-            from: config.email.user_email,
-            to: email,
-            subject: `${randomCode}. Codigo de recuperación de contraseña`,
-            body: "El codigo vence en 15 minutos",
-            html: recoveryPasswordEmail(randomCode, email)
-        }
-
-        //3 enviar
+        //Enviar por correo con Mailjet (el codigo vence en 15 minutos)
         try {
-            await transporter.sendMail(mailOptions);
+            await sendEmail({
+                to: email,
+                subject: `${randomCode}. Codigo de recuperación de contraseña`,
+                html: recoveryPasswordEmail(randomCode, email)
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({message: "error al enviar el correo"});
@@ -79,6 +64,9 @@ recoveryPasswordController.verifyCode = async (req, res) => {
         
         //2- obtenemos codigo en cookie
         const token = req.cookies.recoveryCookie
+        if(!token){
+            return res.status(400).json({message: "Codigo expirado, solicita uno nuevo"})
+        }
 
         //3- extraer token
         const decoded = jsonwebtoken.verify(token, config.jwt.secret);
@@ -94,7 +82,7 @@ recoveryPasswordController.verifyCode = async (req, res) => {
             {expiresIn: "15m"}
         )
 
-        res.cookie("recoveryCookie", newToken, { maxAge: 15 * 60 * 1000 });
+        res.cookie("recoveryCookie", newToken, {...cookieOptions, maxAge: 15 * 60 * 1000});
 
         return res.status(200).json({ message: "Code verified sucessfully" })
     } catch (error) {
@@ -115,6 +103,9 @@ recoveryPasswordController.newPassword = async(req, res) => {
 
         //vamos a comprobar que el token ya esta verificado
         const token = req.cookies.recoveryCookie;
+        if(!token){
+            return res.status(400).json({message: "Codigo expirado, solicita uno nuevo"})
+        }
         const decoded = jsonwebtoken.verify(token, config.jwt.secret)
 
         if(!decoded.verified){
@@ -130,7 +121,7 @@ recoveryPasswordController.newPassword = async(req, res) => {
             {new: true}
         )
 
-        res.clearCookie("recoveryCookie");
+        res.clearCookie("recoveryCookie", cookieOptions);
 
         return res.status(200).json({message: "Password updated"})
     } catch (error) {

@@ -1,12 +1,12 @@
-import nodemailer from "nodemailer"; //enviar correo
 import crypto from "crypto"//
 import jsonwebtoken from "jsonwebtoken"
 import bcrypts from "bcryptjs"
 
 import clientsModel from "../models/clientsModel.js";
 import registerEmail from "../utils/registerEmail.js";
+import sendEmail from "../utils/sendEmail.js";
 
-import { config } from "../../config.js";
+import { config, cookieOptions } from "../../config.js";
 import { text } from "stream/consumers";
 import { error } from "console";
 
@@ -24,11 +24,11 @@ registerClientController.insertClients = async (req, res) => {
             return res.status(400).json({message: "Campos incompletos"})
         }
 
-        if(birthDate >= Date.now()){
+        if(!birthDate || isNaN(new Date(birthDate)) || new Date(birthDate) >= Date.now()){
             return res.status(400).json({message: "Fecha invalida"})
         }
 
-        if(name.lenght < 3){
+        if(name.length < 3){
             return res.status(400).json({message: "name too short"})
         }
 
@@ -38,7 +38,7 @@ registerClientController.insertClients = async (req, res) => {
             return res.status(400).json({message: "email already in use"})
         }
 
-        if(password.lenght < 5){
+        if(password.length < 5){
             return res.status(400).json({message: "Password invalid"})
         }
 
@@ -61,35 +61,23 @@ registerClientController.insertClients = async (req, res) => {
             {expiresIn: "15m"}
         );
 
-        res.cookie("verificationTokenCookie", tokenCode, {maxAge: 15 * 60 * 1000})
+        res.cookie("verificationTokenCookie", tokenCode, {...cookieOptions, maxAge: 15 * 60 * 1000})
 
-        //Enviar el correo
-        //#1. Quien lo envía?
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth:{
-                user: config.email.user_email,
-                pass: config.email.user_password
-            }
-        })
- 
-        //#2. Que se envia?
-        const mailOptions = {
-            from: config.email.user_email,
-            to: email,
-            subject: `Paso final! Codigo de verificacion: ${verificationCode}`,
-            html: registerEmail(verificationCode, email)
+        //Enviar el correo con Mailjet
+        try {
+            await sendEmail({
+                to: email,
+                subject: `Paso final! Codigo de verificacion: ${verificationCode}`,
+                html: registerEmail(verificationCode, email)
+            });
+        } catch (error) {
+            console.log(error);
+            //Si el correo no salio, borramos el cliente para que pueda volver a registrarse
+            await clientsModel.deleteOne({_id: newClient._id});
+            return res.status(500).json({message: "error al enviar el correo"});
         }
 
-        //#3. Enviar
-        transporter.sendMail(mailOptions, (error, info) =>{
-            if(error){
-                console.log(error)
-                return res.status(500).json({message: error})
-            }
-
-            return res.status(200).json({message: "email sent"})
-        })
+        return res.status(200).json({message: "email sent"})
     } catch (error) {
         console.log("Error: " + error);
         return res.status(500).json({message: "Internal server error"});
@@ -103,6 +91,9 @@ registerClientController.verifyCode = async (req, res) => {
         
         //2- obtenemos codigo en cookie
         const token = req.cookies.verificationTokenCookie
+        if(!token){
+            return res.status(400).json({message: "Codigo expirado, solicita uno nuevo"})
+        }
 
         //3- extraer token
         const decoded = jsonwebtoken.verify(token, config.jwt.secret);
@@ -117,7 +108,7 @@ registerClientController.verifyCode = async (req, res) => {
         client.emailVerification = true;
         await client.save();
 
-        res.clearCookie("verificationTokenCookie")
+        res.clearCookie("verificationTokenCookie", cookieOptions)
 
         return res.status(200).json({message: "Email verified successfully"})
     } catch (error) {

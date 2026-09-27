@@ -4,7 +4,9 @@ import { config } from "./config.js";
 
 //creamos la funcion que se encargara de iniciar el servidor
 async function main() {
-  app.listen(config.server.PORT);
+  app.listen(config.server.PORT, () => {
+    console.log("Servidor corriendo en el puerto " + config.server.PORT);
+  });
 }
 
 main();

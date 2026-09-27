@@ -22,6 +22,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { Alert } from 'react-native';
 
 import { apiUrl } from '@/constants/config';
+import { clearLocalCart } from '@/lib/cartStorage';
 
 const STORAGE_KEYS = {
   nombre: 'authNombre',
@@ -45,6 +46,10 @@ export function SessionProvider({ children }) {
   const [Id, setId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // Campos extra del registro (email y password se comparten con el login)
+  const [name, setName] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   /** Guarda los datos de sesión que devuelve el backend. */
   const persistSession = useCallback(async (json) => {
@@ -98,6 +103,7 @@ export function SessionProvider({ children }) {
           'Email not found': 'No existe ninguna cuenta con este correo',
           'Contraseña incorrecta': 'Contraseña incorrecta. Inténtalo de nuevo',
           'Cuenta bloqueada': `Cuenta bloqueada por intentos fallidos. Espera ${minutos} min`,
+          'Verifica tu correo primero': 'Verifica tu correo antes de iniciar sesión',
         };
         notify(messages[json.message] ?? 'No se pudo iniciar sesión');
         return false;
@@ -116,6 +122,106 @@ export function SessionProvider({ children }) {
       setLoading(false);
     }
   }, [email, password, persistSession]);
+
+  /**
+   * Registra un cliente contra POST /apiActiveLife/registerClients — port de RegistroClient.jsx.
+   * El backend deja el código en la cookie verificationTokenCookie y lo manda por correo.
+   */
+  const registrarCliente = useCallback(async () => {
+    if (!name.trim() || !birthDate.trim() || !email.trim() || !password || !confirmPassword) {
+      notify('Por favor completa todos los datos');
+      return false;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate.trim())) {
+      notify('La fecha de nacimiento debe tener el formato AAAA-MM-DD');
+      return false;
+    }
+    if (password.length < 5) {
+      notify('La contraseña debe contener al menos 5 caracteres');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      notify('La confirmación de contraseña no coincide con la contraseña');
+      return false;
+    }
+    try {
+      setLoading(true);
+      const res = await fetch(apiUrl('/registerClients'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: name.trim(),
+          birthDate: birthDate.trim(),
+          email: email.trim(),
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        // Mensajes exactos que devuelve registerClientsController.js
+        const messages = {
+          'Campos incompletos': 'Todos los campos deben ser rellenados',
+          'Fecha invalida': 'La fecha no puede ser hoy o una fecha futura',
+          'email already in use': 'El correo ingresado ya le pertenece a otro usuario',
+          'name too short': 'El nombre debe tener al menos 3 caracteres',
+          'Password invalid': 'La contraseña debe contener al menos 5 caracteres',
+        };
+        notify(messages[json.message] ?? 'Error interno del servidor. Vuelve a intentarlo');
+        return false;
+      }
+
+      setName('');
+      setBirthDate('');
+      setPassword('');
+      setConfirmPassword('');
+      notify('Te enviamos un código de verificación a tu correo');
+      return true;
+    } catch (error) {
+      console.log('Error registro:', error);
+      notify('No se pudo conectar con el servidor. Revisa tu conexión y la URL del API.');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [name, birthDate, email, password, confirmPassword]);
+
+  /** Verifica el código del correo contra POST /registerClients/verifyCode. */
+  const verificarCodigo = useCallback(async (codigo) => {
+    if (!codigo || codigo.length < 6) {
+      notify('Ingresa el código completo');
+      return false;
+    }
+    try {
+      setLoading(true);
+      const res = await fetch(apiUrl('/registerClients/verifyCode'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ verificationCodeRequest: codigo.trim().toLowerCase() }),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        const messages = {
+          'Invalid code': 'El código es incorrecto',
+          'Codigo expirado, solicita uno nuevo': 'El código expiró. Regístrate de nuevo',
+        };
+        notify(messages[json.message] ?? 'No se pudo verificar el correo');
+        return false;
+      }
+
+      notify('Correo verificado. Ya puedes iniciar sesión');
+      return true;
+    } catch (error) {
+      console.log('Error verificación:', error);
+      notify('No se pudo conectar con el servidor. Revisa tu conexión y la URL del API.');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   /** Rehidrata la sesión guardada al abrir la app. */
   const verify = useCallback(async () => {
@@ -147,7 +253,11 @@ export function SessionProvider({ children }) {
   const logOut = useCallback(async () => {
     try {
       setLoading(true);
-      await fetch(apiUrl('/logOutClients'), { method: 'POST' }).catch(() => {});
+      await fetch(apiUrl('/logOutClients'), { method: 'POST', credentials: 'include' }).catch(
+        () => {},
+      );
+      // El carrito local no debe pasar al siguiente usuario del dispositivo
+      await clearLocalCart();
       await clearSession();
     } finally {
       setLoading(false);
@@ -171,11 +281,35 @@ export function SessionProvider({ children }) {
       password,
       setEmail,
       setPassword,
+      name,
+      birthDate,
+      confirmPassword,
+      setName,
+      setBirthDate,
+      setConfirmPassword,
       logInCliente,
+      registrarCliente,
+      verificarCodigo,
       verify,
       logOut,
     }),
-    [verifying, loading, isLoggedIn, Nombre, Id, email, password, logInCliente, verify, logOut],
+    [
+      verifying,
+      loading,
+      isLoggedIn,
+      Nombre,
+      Id,
+      email,
+      password,
+      name,
+      birthDate,
+      confirmPassword,
+      logInCliente,
+      registrarCliente,
+      verificarCodigo,
+      verify,
+      logOut,
+    ],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

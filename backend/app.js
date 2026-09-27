@@ -3,6 +3,7 @@ import express from 'express';
 import clientsRouter from './src/routes/clientsRoute.js';
 import registerClientRoute from './src/routes/registerClientsRoute.js';
 import logInClientsRoute from './src/routes/logInClientsRoute.js';
+import logOutClientsRoute from './src/routes/logOutClientsRoute.js';
 import recoveryPasswordClientRoute from './src/routes/recoveryPasswordClientRoute.js';
 import recoveryPasswordAdminRoute from './src/routes/recoveryPasswordAdminRoute.js';
 import productRoute from './src/routes/productsRoute.js';
@@ -25,6 +26,9 @@ import membershipRoute from './src/routes/membershipRoute.js';
 import wompiRoutes from "./src/routes/wompi.js";
 
 const app = express();
+
+// Render pone un proxy delante: sin esto el rate limiter ve a todos con la misma IP
+app.set("trust proxy", 1);
 
 app.use(cors({
     origin: [config.frontend.url],
@@ -49,6 +53,7 @@ app.use("/apiActiveLife/loginEmployee",loginEmployeesRoute);
 app.use("/apiActiveLife/employees",employeesRoute);
 app.use("/apiActiveLife/registerEmployee",registerEmployeesRoute);
 app.use("/apiActiveLife/logInClients", logInClientsRoute);
+app.use("/apiActiveLife/logOutClients", logOutClientsRoute);
 app.use("/apiActiveLife/recoveryPasswordClient", recoveryPasswordClientRoute);
 app.use("/apiActiveLife/recoveryPasswordAdmin", recoveryPasswordAdminRoute);
 app.use("/apiActiveLife/products", productRoute);

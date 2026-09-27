@@ -21,7 +21,7 @@ membershipController.getById = async (req, res) => {
     try {
         const membership = await membershipModel.findById(req.params.id)
         if (!membership) {
-            return res.status(404).json({message: `no se encontro membresia con id: ${id}`})
+            return res.status(404).json({message: `no se encontro membresia con id: ${req.params.id}`})
         }
         return res.status(200).json(membership)
     } catch (error) {

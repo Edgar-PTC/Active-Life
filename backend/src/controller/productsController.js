@@ -101,8 +101,9 @@ productsController.update = async (req, res) => {
         name = name?.trim();
         category = category?.trim();
         description = description?.trim();
-        priceRequest = priceRequest?.trim();
-        stockRequest = stockRequest?.trim();
+        // Por JSON pueden llegar como número; por form-data llegan como texto
+        priceRequest = typeof priceRequest === "string" ? priceRequest.trim() : priceRequest;
+        stockRequest = typeof stockRequest === "string" ? stockRequest.trim() : stockRequest;
 
         let price;
         if (priceRequest && typeof priceRequest === 'string') {
@@ -138,7 +139,9 @@ productsController.update = async (req, res) => {
         productFound.description = description ?? productFound.description;
 
         if(req.file){
-            await cloudinary.uploader.destroy(productFound.image_id);
+            if (productFound.image_id) {
+                await cloudinary.uploader.destroy(productFound.image_id);
+            }
             productFound.image = req.file.path;
             productFound.image_id = req.file.filename;
         }

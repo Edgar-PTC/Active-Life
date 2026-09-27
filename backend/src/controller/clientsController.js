@@ -47,11 +47,11 @@ clientController.updateClients = async (req, res) => {
         name = name?.trim();
         email = email?.trim();
 
-        if(birthDate && birthDate >= Date.now()){
+        if(birthDate && new Date(birthDate) >= Date.now()){
             return res.status(400).json({message: "la fecha no puede ser hoy o una en un futuro"})
         }
 
-        if(name && name.lenght < 3){
+        if(name && name.length < 3){
             return res.status(400).json({message: "name too short"})
         }
 

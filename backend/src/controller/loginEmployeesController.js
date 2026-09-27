@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
 
 import employeesModel from "../models/employeesModel.js";
-import { config } from "../../config.js";
+import { config, cookieOptions } from "../../config.js";
 
 const loginEmployeesController = {};
 
@@ -101,9 +101,7 @@ loginEmployeesController.login = async (
     res.cookie(
       "authCookieEmployee",
       token,
-      {
-        httpOnly: true,
-      }
+      { ...cookieOptions, httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
     );
 
     return res.status(200).json({
