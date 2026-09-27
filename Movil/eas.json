@@ -9,7 +9,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://RENDER_URL_PENDIENTE.onrender.com/apiActiveLife"
+        "EXPO_PUBLIC_API_URL": "https://active-life.onrender.com/apiActiveLife"
       }
     },
     "production": {
@@ -17,7 +17,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://RENDER_URL_PENDIENTE.onrender.com/apiActiveLife"
+        "EXPO_PUBLIC_API_URL": "https://active-life.onrender.com/apiActiveLife"
       }
     }
   }
