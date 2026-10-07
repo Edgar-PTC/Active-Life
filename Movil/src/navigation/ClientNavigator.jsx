@@ -20,6 +20,7 @@ import PagoCarrito from '@/screens/client/carrito/PagoCarrito';
 import GimnasioDetalle from '@/screens/client/gimnasios/GimnasioDetalle';
 import Gimnasios from '@/screens/client/gimnasios/Gimnasios';
 import PagoMembresia from '@/screens/client/gimnasios/PagoMembresia';
+import Pedidos from '@/screens/client/perfil/Pedidos';
 import Perfil from '@/screens/client/perfil/Perfil';
 import ProductoDetalle from '@/screens/client/tienda/ProductoDetalle';
 import Tienda from '@/screens/client/tienda/Tienda';
@@ -55,6 +56,15 @@ function CarritoStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="CarritoResumen" component={Carrito} />
       <Stack.Screen name="PagoCarrito" component={PagoCarrito} />
+    </Stack.Navigator>
+  );
+}
+
+function PerfilStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="PerfilInicio" component={Perfil} />
+      <Stack.Screen name="Pedidos" component={Pedidos} />
     </Stack.Navigator>
   );
 }
@@ -97,7 +107,7 @@ export default function ClientNavigator() {
       />
       <Tab.Screen
         name="Perfil"
-        component={Perfil}
+        component={PerfilStack}
         options={{ tabBarIcon: ({ color, size }) => <User color={color} size={size} /> }}
       />
     </Tab.Navigator>

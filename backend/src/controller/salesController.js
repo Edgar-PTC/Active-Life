@@ -105,9 +105,13 @@ salesController.buscarPorCliente = async (req, res) => {
         const shoppingCartIds = shoppingCarts.map(cart => cart._id);
 
         // Buscar todas las ventas que correspondan a esos carritos
+        // Más antiguo primero para que la numeración ORD-XXXX sea estable
         const sales = await salesModel.find({
             shoppingCartId: { $in: shoppingCartIds }
-        }).populate('shoppingCartId');
+        }).sort({ createdAt: 1 }).populate({
+            path: 'shoppingCartId',
+            populate: { path: 'products.productId', select: 'name price image category' }
+        });
 
         console.log("Ventas encontradas:", sales.length);
 
@@ -148,12 +152,27 @@ salesController.buscarPorCliente = async (req, res) => {
                 'cancelado': 'Cancelado'
             };
 
+            // Detalle de productos (usado por la app móvil)
+            const items = (sale.shoppingCartId?.products || []).map((p) => ({
+                productId: p.productId?._id,
+                name: p.productId?.name || "Producto sin nombre",
+                image: p.productId?.image || null,
+                amount: p.amount || 0,
+                unitPrice: p.unitPrice || 0,
+                subtotal: p.subtotal || 0
+            }));
+
             return {
                 id: orderId,
+                _id: sale._id,
                 date: date,
+                createdAt: sale.createdAt,
                 product: productName,
                 amount: parseFloat(Number(amount).toFixed(2)),
-                status: statusMap[sale.status?.toLowerCase()] || sale.status || "Pendiente"
+                status: statusMap[sale.status?.toLowerCase()] || sale.status || "Pendiente",
+                deliveryAddress: sale.deliveryAddress || "",
+                paymentMethod: sale.paymentMethod || "",
+                items
             };
         });
 

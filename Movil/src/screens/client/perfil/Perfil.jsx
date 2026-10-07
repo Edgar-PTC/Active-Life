@@ -6,6 +6,7 @@
  *   - me(Id) al montar: carga nombre / correo / fecha de nacimiento (y ventas)
  *   - lápiz -> modal "Editar perfil" -> update({ name, email, birthDate })
  *   - "Cerrar sesion" -> logOut() del contexto de sesión
+ *   - "Mis pedidos" -> pantalla Pedidos (historial de compras)
  *
  * El boceto no incluye la sección "Ventas anteriores" del perfil web, así que no
  * se pinta (el hook sí las trae). Las 5 filas de ajustes son decorativas: en la
@@ -17,6 +18,7 @@ import {
   FileText,
   HelpCircle,
   Lock,
+  Package,
   Phone,
   Shield,
   SquarePen,
@@ -123,7 +125,7 @@ function EditProfileModal({ onClose, nombre, email, birthdate, guardando, onSave
   );
 }
 
-export default function Perfil() {
+export default function Perfil({ navigation }) {
   const { Id, logOut, loading } = useAuth();
   const { nombre, email, birthdate, cargando, guardando, me, update } = usePerfil();
   const [editOpen, setEditOpen] = useState(false);
@@ -166,6 +168,14 @@ export default function Perfil() {
         </View>
 
         <View className="mt-6 gap-3">
+          <TouchableOpacity
+            className="flex-row items-center gap-4 rounded-2xl bg-brand-green-forest px-5 py-4"
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate('Pedidos')}>
+            <Package size={22} color={Brand.white} />
+            <Text className="flex-1 text-[15px] font-bold text-white">Mis pedidos</Text>
+            <ChevronRight size={18} color="rgba(255,255,255,0.7)" />
+          </TouchableOpacity>
           {SETTINGS_ITEMS.map(({ Icon, label }) => (
             <View
               key={label}
